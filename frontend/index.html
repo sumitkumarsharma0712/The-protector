@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>Mind Guardians</title>
+  <title>The Protector</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Google Maps JavaScript API: replace YOUR_GOOGLE_MAPS_API_KEY with your key -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places" defer></script>
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -63,7 +63,7 @@
            <img src="logo.jpg" class="h-full w-full rounded-full" alt="Profile" />
         </div>
         <div>
-           <h2 class="text-lg font-bold"> mind guardians</h2>
+           <h2 class="text-lg font-bold"> The Protector</h2>
            <p class="inline-block rounded bg-white/20 px-2 py-0.5 text-xs opacity-80" id="userRoleDisplay">Student</p>
         </div>
      </div>
@@ -94,7 +94,7 @@
      </button>
      <hr class="my-2 dark:border-slate-800">
      <button class="flex w-full items-center gap-3 rounded-xl p-3 text-left text-blue-600 transition hover:bg-gray-100 dark:text-blue-400 dark:hover:bg-slate-800" onclick="toggleChat(); toggleSidebar();">
-        <i class="ph ph-robot text-xl"></i> <span class="font-medium">Ask mind guardians AI</span>
+        <i class="ph ph-robot text-xl"></i> <span class="font-medium">Ask The Protector AI</span>
      </button>
   </nav>
   <div class="border-t p-4 dark:border-slate-800">
@@ -104,52 +104,60 @@
   </div>
 </aside>
 
-<section id="loginPage" class="animate-fade-in fixed inset-0 z-[50] flex flex-col items-center justify-center bg-white p-6 transition-colors duration-300 dark:bg-slate-900">
-  <div class="w-full max-w-sm text-center">
-    <div class="mb-4 animate-bounce text-7xl">💊 </div>
-    <h1 class="mb-2 text-4xl font-extrabold text-blue-600 dark:text-blue-400" data-translate="app_name">mind guardians</h1>
-    <p class="mb-8 font-medium text-gray-500 dark:text-gray-400" data-translate="login_sub">Your Digital Mental Health Partner</p>
+<section id="loginPage" class="animate-fade-in fixed inset-0 z-[50] flex flex-col items-center justify-center overflow-hidden bg-slate-50 p-4 transition-colors duration-300 dark:bg-slate-950">
+  <!-- Glowing Background Orbs -->
+  <div class="absolute -left-10 -top-10 h-72 w-72 animate-pulse rounded-full bg-blue-500/20 blur-3xl"></div>
+  <div class="absolute -bottom-10 -right-10 h-72 w-72 animate-pulse rounded-full bg-indigo-500/20 blur-3xl"></div>
+  
+  <div id="loginCard" class="bg-white/85 relative w-full max-w-md rounded-3xl border border-white/20 p-8 text-center shadow-[0_20px_50px_rgba(37,99,235,0.15)] ring-2 ring-blue-500/20 backdrop-blur-lg transition-all duration-300 dark:bg-slate-900/70 dark:shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+    <div class="mb-4 inline-flex h-20 w-20 animate-bounce items-center justify-center rounded-2xl bg-blue-50 text-4xl shadow-inner dark:bg-blue-900/20">💊</div>
+    <h1 class="mb-1 text-3xl font-black tracking-tight text-slate-800 dark:text-white" data-translate="app_name">The Protector</h1>
+    <p class="mb-6 text-sm font-semibold text-slate-500 dark:text-slate-400" data-translate="login_sub">Your Digital Mental Health Partner</p>
     
     <form onsubmit="handleInitialLogin(event)" class="w-full space-y-4 text-left">
       <div>
-        <label class="text-sm font-bold text-gray-700 dark:text-gray-300">Select Role</label>
-        <select id="loginRole" class="mt-1 w-full rounded-xl border border-gray-200 bg-gray-50 p-3 outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
-            <option value="student">Student (Public)</option>
-            <option value="counsellor">Counsellor (Private)</option>
-            <option value="admin">Admin (Private)</option>
-        </select>
+        <label class="text-xs font-black uppercase tracking-wider text-slate-500 dark:text-slate-400">Select Role</label>
+        <div class="relative mt-1">
+            <i class="ph ph-user-focus absolute left-3 top-3.5 text-lg text-slate-400"></i>
+            <select id="loginRole" onchange="handleLoginRoleChange(this.value)" class="w-full rounded-xl border border-slate-200 bg-white/50 p-3 pl-10 outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-slate-800 dark:bg-slate-950/50 dark:text-white">
+                <option value="student">Student (Public)</option>
+                <option value="employer">Employer</option>
+                <option value="counsellor">Counsellor (Private)</option>
+                <option value="admin">Admin (Private)</option>
+            </select>
+        </div>
       </div>
 
       <div>
-        <label class="text-sm font-bold text-gray-700 dark:text-gray-300" data-translate="lbl_email">Email / ID</label>
+        <label class="text-xs font-black uppercase tracking-wider text-slate-500 dark:text-slate-400" data-translate="lbl_email">Email / ID</label>
         <div class="relative mt-1">
-            <i class="ph ph-envelope absolute left-3 top-3.5 text-lg text-gray-400"></i>
-            <input type="email" id="email" value="demo@sahayak.ai" class="w-full rounded-xl border border-gray-200 bg-gray-50 p-3 pl-10 outline-none transition-all focus:ring-2 focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-800 dark:text-white" required />
+            <i class="ph ph-envelope absolute left-3 top-3.5 text-lg text-slate-400"></i>
+            <input type="email" id="email" value="student@college.edu" class="w-full rounded-xl border border-slate-200 bg-white/50 p-3 pl-10 outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-slate-800 dark:bg-slate-950/50 dark:text-white" required />
         </div>
       </div>
       <div>
-        <label class="text-sm font-bold text-gray-700 dark:text-gray-300" data-translate="lbl_pass">Password</label>
+        <label class="text-xs font-black uppercase tracking-wider text-slate-500 dark:text-slate-400" data-translate="lbl_pass">Password</label>
         <div class="relative mt-1">
-            <i class="ph ph-lock absolute left-3 top-3.5 text-lg text-gray-400"></i>
-            <input type="password" id="password" value="Health123" class="w-full rounded-xl border border-gray-200 bg-gray-50 p-3 pl-10 outline-none transition-all focus:ring-2 focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-800 dark:text-white" required />
+            <i class="ph ph-lock absolute left-3 top-3.5 text-lg text-slate-400"></i>
+            <input type="password" id="password" value="password123" class="w-full rounded-xl border border-slate-200 bg-white/50 p-3 pl-10 outline-none transition-all focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 dark:border-slate-800 dark:bg-slate-950/50 dark:text-white" required />
         </div>
       </div>
       <div class="flex items-center justify-between text-sm">
         <div class="flex items-center gap-1">
-            <i class="ph ph-globe text-gray-400"></i>
-            <select onchange="changeLanguage(this.value)" class="cursor-pointer bg-transparent outline-none dark:text-white">
+            <i class="ph ph-globe text-slate-400"></i>
+            <select onchange="changeLanguage(this.value)" class="cursor-pointer bg-transparent font-semibold text-slate-600 outline-none dark:text-slate-300">
                <option value="en">English</option><option value="hi">Hindi</option><option value="mr">Marathi</option>
             </select>
         </div>
-        <button type="button" onclick="showPage('forgotPage')" class="text-blue-500 hover:underline">Forgot?</button>
+        <button type="button" onclick="showPage('forgotPage')" class="font-bold text-blue-600 hover:text-blue-700 hover:underline dark:text-blue-400 dark:hover:text-blue-300">Forgot?</button>
       </div>
-      <button type="submit" id="loginBtn" class="btn-click mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 py-3.5 text-lg font-bold text-white shadow-lg transition-transform hover:from-blue-700 hover:to-indigo-700">
+      <button type="submit" id="loginBtn" class="btn-click text-md mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 py-3.5 font-bold text-white shadow-lg shadow-blue-500/20 transition-all hover:shadow-xl hover:shadow-blue-500/30">
         <span data-translate="btn_login">Login</span> <i class="ph ph-arrow-right"></i>
       </button>
     </form>
     
-    <div class="mt-6 text-center text-sm text-gray-500">
-        New here? <button type="button" onclick="showPage('signupPage')" class="font-bold text-blue-600 hover:underline">Create Account</button>
+    <div class="mt-6 text-center text-sm font-semibold text-slate-500 dark:text-slate-400">
+        New here? <button type="button" onclick="showPage('signupPage')" class="font-black text-blue-600 hover:underline dark:text-blue-400">Create Account</button>
     </div>
   </div>
 </section>
@@ -178,11 +186,20 @@
 <section id="signupPage" class="fixed inset-0 z-[50] hidden flex-col items-center justify-center bg-white p-6 transition-colors duration-300 dark:bg-slate-900">
   <div class="w-full max-w-sm text-center">
     <h2 class="mb-2 text-3xl font-extrabold text-blue-600 dark:text-blue-400">Create Account</h2>
-    <p class="mb-8 font-medium text-gray-500 dark:text-gray-400">Join Mind Guardians today</p>
+    <p class="mb-8 font-medium text-gray-500 dark:text-gray-400">Join The Protector today</p>
     <form onsubmit="handleBackendSignup(event)" class="w-full space-y-4 text-left">
       <div><label class="text-sm font-bold text-gray-700 dark:text-gray-300">Full Name</label><input type="text" id="signupName" class="mt-1 w-full rounded-xl border border-gray-200 bg-gray-50 p-3 outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white" required /></div>
       <div><label class="text-sm font-bold text-gray-700 dark:text-gray-300">Email</label><input type="email" id="signupEmail" class="mt-1 w-full rounded-xl border border-gray-200 bg-gray-50 p-3 outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white" required /></div>
       <div><label class="text-sm font-bold text-gray-700 dark:text-gray-300">Password</label><input type="password" id="signupPass" class="mt-1 w-full rounded-xl border border-gray-200 bg-gray-50 p-3 outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white" required /></div>
+      <div>
+        <label class="text-sm font-bold text-gray-700 dark:text-gray-300">Select Role</label>
+        <select id="signupRole" class="mt-1 w-full rounded-xl border border-gray-200 bg-gray-50 p-3 outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+            <option value="student">Student</option>
+            <option value="employer">Employer</option>
+            <option value="counsellor">Counsellor</option>
+            <option value="admin">Admin</option>
+        </select>
+      </div>
       <button type="submit" id="signupBtn" class="btn-click mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 py-3.5 text-lg font-bold text-white shadow-lg transition hover:bg-blue-700">Register</button>
     </form>
     <div class="mt-6 text-sm text-gray-500">Already have an account? <button onclick="showPage('loginPage')" class="font-bold text-blue-600 hover:underline">Login here</button></div>
@@ -229,7 +246,7 @@
            <button onclick="toggleSidebar()" class="rounded-full p-1 text-2xl transition hover:bg-gray-100 dark:text-white dark:hover:bg-slate-800"><i class="ph ph-list"></i></button>
            <div class="flex items-center gap-2">
                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 font-bold text-white shadow-sm">S</div>
-               <h1 class="hidden text-lg font-bold dark:text-white sm:block" data-translate="app_name">mind guardians</h1>
+               <h1 class="hidden text-lg font-bold dark:text-white sm:block" data-translate="app_name">The Protector</h1>
            </div>
         </div>
         <div class="relative max-w-xs flex-1">
@@ -249,251 +266,667 @@
   </header>
 
   <main class="space-y-6 p-4">
-
     <div id="dashboardView">
 
-        <div id="homeSection" class="animate-fade-in relative flex items-center justify-between overflow-hidden rounded-3xl bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white shadow-xl dark:from-blue-900 dark:to-slate-800">
-          <div class="relative z-10 flex-1">
-            <span class="mb-2 inline-block rounded-full border border-white/10 bg-white/20 px-2 py-1 text-[10px] font-bold">Development of a Digital Mental Health and Psychological Support System</span>
-            <h2 class="mb-1 text-2xl font-extrabold" data-translate="hero_title">Hi, <span id="displayUserName">Khushi</span> 👋</h2>
-            <p class="mb-4 text-sm opacity-90" data-translate="hero_desc">How are you feeling?</p>
-            <div class="flex gap-2">
-              <button onclick="openPhqModal()" class="btn-click flex items-center gap-1 rounded-xl bg-white px-3 py-2 text-xs font-bold text-blue-700 shadow-md">
-                 <i class="ph ph-clipboard-text text-lg"></i> <span data-translate="btn_symptoms">Test</span>
-              </button>
-              <button onclick="openTeleModal()" class="btn-click flex items-center gap-1 rounded-xl border border-blue-400 bg-blue-700 px-3 py-2 text-xs font-bold text-white">
-                 <i class="ph ph-calendar-plus text-lg"></i> <span data-translate="btn_book">Book</span>
-              </button>
+        <!-- STUDENT DASHBOARD -->
+        <div id="studentDashboard" class="hidden space-y-6">
+            <div id="homeSection" class="animate-fade-in relative flex items-center justify-between overflow-hidden rounded-3xl bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white shadow-xl dark:from-blue-900 dark:to-slate-800">
+              <div class="relative z-10 flex-1">
+                <span class="mb-2 inline-block rounded-full border border-white/10 bg-white/20 px-2 py-1 text-[10px] font-bold">Development of a Digital Mental Health and Psychological Support System Student, Employer</span>
+                <h2 class="mb-1 text-2xl font-extrabold" data-translate="hero_title">Hi, <span id="displayUserName">Sumit</span> 👋</h2>
+                <p class="mb-4 text-sm opacity-90" data-translate="hero_desc">How are you feeling?</p>
+                <div class="flex gap-2">
+                  <button onclick="openPhqModal()" class="btn-click flex items-center gap-1 rounded-xl bg-white px-3 py-2 text-xs font-bold text-blue-700 shadow-md">
+                     <i class="ph ph-clipboard-text text-lg"></i> <span data-translate="btn_symptoms">Test</span>
+                  </button>
+                  <button onclick="openTeleModal()" class="btn-click flex items-center gap-1 rounded-xl border border-blue-400 bg-blue-700 px-3 py-2 text-xs font-bold text-white">
+                     <i class="ph ph-calendar-plus text-lg"></i> <span data-translate="btn_book">Book</span>
+                  </button>
+                </div>
+              </div>
+              <div class="relative z-10 -mr-2 h-32 w-32 flex-shrink-0">
+                  <img src="logo 2.jpg" alt="Health" class="h-full w-full animate-pulse object-contain drop-shadow-2xl" />
+              </div>
             </div>
-          </div>
-          <div class="relative z-10 -mr-2 h-32 w-32 flex-shrink-0">
-              <img src="logo 2.jpg" alt="Health" class="h-full w-full animate-pulse object-contain drop-shadow-2xl" />
-          </div>
-        </div>
 
-        <div class="mt-6 flex rounded-2xl border bg-white p-1.5 text-sm font-bold shadow-sm dark:border-slate-700 dark:bg-slate-800">
-           <button onclick="switchTab('user')" id="tabUser" class="flex-1 rounded-xl bg-gray-100 py-2.5 text-blue-600 shadow-sm transition-all dark:bg-slate-700 dark:text-blue-300" data-translate="tab_wellness">My Wellness</button>
-           <button onclick="switchTab('admin')" id="tabAdmin" class="flex-1 rounded-xl py-2.5 text-gray-500 transition-all hover:text-blue-500" data-translate="tab_admin">Admin View</button>
-        </div>
-
-        <div id="userView" class="animate-fade-in mt-4 space-y-4">
-          <div class="search-item rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-             <div class="mb-4 flex items-center justify-between">
-                <h3 class="flex items-center gap-2 text-lg font-bold dark:text-white"><i class="ph ph-pill text-2xl text-red-500"></i> <span data-translate="card_meds">MedAids</span></h3>
-                <button onclick="addMedPrompt()" class="btn-click flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-bold text-blue-600 transition hover:bg-blue-200 dark:bg-slate-800 dark:text-blue-300"><i class="ph ph-plus"></i></button>
-             </div>
-             <div class="mb-3 flex items-center justify-between rounded-xl bg-gray-50 p-3 dark:bg-slate-800">
-                <span class="text-xs font-bold text-gray-600 dark:text-gray-300" data-translate="lbl_caregiver">Caregiver Mode</span>
-                <label class="relative inline-flex cursor-pointer items-center"><input type="checkbox" id="caregiverToggle" class="peer sr-only" onchange="toggleCaregiver()"><div class="peer h-5 w-9 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:bg-green-500 peer-checked:after:translate-x-full peer-focus:outline-none dark:bg-slate-700"></div></label>
-             </div>
-             <div id="medList" class="space-y-2"><div class="py-2 text-center text-sm italic text-gray-400" data-translate="no_meds">No reminders active.</div></div>
-          </div>
-           
-          <div class="search-item flex items-center justify-between rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-             <div>
-                <h3 class="font-bold dark:text-white" data-translate="card_history">Wellness History</h3>
-                <p class="text-xs text-gray-500 dark:text-gray-400"><span data-translate="lbl_last_score">Last Score</span>: <span id="lastScoreStatus" class="font-bold text-blue-600 dark:text-blue-400">--</span></p>
-             </div>
-             <button onclick="downloadReport()" class="btn-click flex flex-col items-center gap-1 rounded-xl bg-gray-100 p-3 text-xs font-bold text-gray-700 transition hover:bg-gray-200 dark:bg-slate-800 dark:text-gray-300 dark:hover:bg-slate-700">
-               <i class="ph ph-download-simple text-lg"></i> <span data-translate="btn_download">Save</span>
-             </button>
-          </div>
-        </div>
-
-        <div id="adminView" class="animate-fade-in mt-4 hidden space-y-4">
-          <div class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-             <div class="mb-4 flex items-center justify-between">
-                 <h3 class="text-lg font-bold dark:text-white" data-translate="card_analytics">Analytics</h3>
-                 <button class="rounded-full bg-blue-100 px-3 py-1 text-xs font-bold text-blue-700" data-translate="btn_intervention">Action</button>
-             </div>
-             <div class="mb-6 grid grid-cols-2 gap-4">
-                <div class="rounded-xl border border-red-100 bg-red-50 p-4 text-center dark:border-red-900/30 dark:bg-red-900/20"><div class="text-2xl font-extrabold text-red-600">14</div><div class="text-[10px] font-bold uppercase text-red-500" data-translate="stat_risk">High Risk</div></div>
-                <div class="rounded-xl border border-blue-100 bg-blue-50 p-4 text-center dark:border-blue-900/30 dark:bg-blue-900/20"><div class="text-2xl font-extrabold text-blue-600">6.4</div><div class="text-[10px] font-bold uppercase text-blue-500" data-translate="stat_stress">Avg. Stress</div></div>
-             </div>
-             <div class="h-48"><canvas id="chartAnalytics"></canvas></div>
-          </div>
-        </div>
-
-        <div id="resources">
-            <h3 class="mb-3 mt-6 flex items-center gap-2 text-xl font-bold dark:text-white" data-translate="title_resources"><i class="ph ph-squares-four text-indigo-500"></i> Digital Clinic & Tools</h3>
-            <div class="grid grid-cols-2 gap-3">
+            <div class="mt-4 space-y-4">
+              <div class="search-item rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                 <div class="mb-4 flex items-center justify-between">
+                    <h3 class="flex items-center gap-2 text-lg font-bold dark:text-white"><i class="ph ph-pill text-2xl text-red-500"></i> <span data-translate="card_meds">MedAids</span></h3>
+                    <button onclick="addMedPrompt()" class="btn-click flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 font-bold text-blue-600 transition hover:bg-blue-200 dark:bg-slate-800 dark:text-blue-300"><i class="ph ph-plus"></i></button>
+                 </div>
+                 <div class="mb-3 flex items-center justify-between rounded-xl bg-gray-50 p-3 dark:bg-slate-800">
+                    <span class="text-xs font-bold text-gray-600 dark:text-gray-300" data-translate="lbl_caregiver">Caregiver Mode</span>
+                    <label class="relative inline-flex cursor-pointer items-center"><input type="checkbox" id="caregiverToggle" class="peer sr-only" onchange="toggleCaregiver()"><div class="peer h-5 w-9 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-4 after:w-4 after:rounded-full after:bg-white after:transition-all after:content-[''] peer-checked:bg-green-500 peer-checked:after:translate-x-full peer-focus:outline-none dark:bg-slate-700"></div></label>
+                 </div>
+                 <div id="medList" class="space-y-2"><div class="py-2 text-center text-sm italic text-gray-400" data-translate="no_meds">No reminders active.</div></div>
+              </div>
                
-               <div onclick="openVideoCall()" class="btn-click search-item cursor-pointer rounded-2xl border border-blue-100 bg-blue-50 p-4 shadow-sm transition hover:shadow-md dark:border-blue-900 dark:bg-blue-900/20">
-                  <i class="ph ph-video-camera mb-2 text-3xl text-blue-600 dark:text-blue-400"></i>
-                  <h4 class="text-sm font-bold text-gray-800 dark:text-gray-200">Tele-Medicine</h4>
-                  <p class="text-xs opacity-60">Video Consult</p>
-               </div>
+              <div class="search-item flex items-center justify-between rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                 <div>
+                    <h3 class="font-bold dark:text-white" data-translate="card_history">Wellness History</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400"><span data-translate="lbl_last_score">Last Score</span>: <span id="lastScoreStatus" class="font-bold text-blue-600 dark:text-blue-400">--</span></p>
+                 </div>
+                 <button onclick="downloadReport()" class="btn-click flex flex-col items-center gap-1 rounded-xl bg-gray-100 p-3 text-xs font-bold text-gray-700 transition hover:bg-gray-200 dark:bg-slate-800 dark:text-gray-300 dark:hover:bg-slate-700">
+                   <i class="ph ph-download-simple text-lg"></i> <span data-translate="btn_download">Save</span>
+                 </button>
+              </div>
+            </div>
 
-               <div onclick="openSymptomChecker()" class="btn-click search-item cursor-pointer rounded-2xl border border-teal-100 bg-teal-50 p-4 shadow-sm transition hover:shadow-md dark:border-teal-900 dark:bg-teal-900/20">
-                  <i class="ph ph-stethoscope mb-2 text-3xl text-teal-600 dark:text-teal-400"></i>
-                  <h4 class="text-sm font-bold text-gray-800 dark:text-gray-200">AI Symptoms</h4>
-                  <p class="text-xs opacity-60">Check Health</p>
-               </div>
+            <div id="resources">
+                <h3 class="mb-3 mt-6 flex items-center gap-2 text-xl font-bold dark:text-white" data-translate="title_resources"><i class="ph ph-squares-four text-indigo-500"></i> Digital Clinic & Tools</h3>
+                <div class="grid grid-cols-2 gap-3">
+                   <div onclick="openVideoCall()" class="btn-click search-item cursor-pointer rounded-2xl border border-blue-100 bg-blue-50 p-4 shadow-sm transition hover:shadow-md dark:border-blue-900 dark:bg-blue-900/20">
+                      <i class="ph ph-video-camera mb-2 text-3xl text-blue-600 dark:text-blue-400"></i>
+                      <h4 class="text-sm font-bold text-gray-800 dark:text-gray-200">Tele-Medicine</h4>
+                      <p class="text-xs opacity-60">Video Consult</p>
+                   </div>
+                   <div onclick="openSymptomChecker()" class="btn-click search-item cursor-pointer rounded-2xl border border-teal-100 bg-teal-50 p-4 shadow-sm transition hover:shadow-md dark:border-teal-900 dark:bg-teal-900/20">
+                      <i class="ph ph-stethoscope mb-2 text-3xl text-teal-600 dark:text-teal-400"></i>
+                      <h4 class="text-sm font-bold text-gray-800 dark:text-gray-200">AI Symptoms</h4>
+                      <p class="text-xs opacity-60">Check Health</p>
+                   </div>
+                   <div onclick="openPeerPage()" class="btn-click search-item cursor-pointer rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition hover:shadow-md dark:border-slate-800 dark:bg-slate-900">
+                      <i class="ph ph-users-three mb-2 text-3xl text-indigo-500"></i>
+                      <h4 class="text-sm font-bold text-gray-800 dark:text-gray-200" data-translate="card_peer">Peer Forum</h4>
+                      <p class="text-xs opacity-60">Exam Stress Group</p>
+                   </div>
+                   <div onclick="openAudioPage()" class="btn-click search-item cursor-pointer rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition hover:shadow-md dark:border-slate-800 dark:bg-slate-900">
+                      <i class="ph ph-headphones mb-2 text-3xl text-purple-500"></i>
+                      <h4 class="text-sm font-bold text-gray-800 dark:text-gray-200" data-translate="card_audio">Relax Audio</h4>
+                      <p class="text-xs opacity-60">Deep Breathing</p>
+                   </div>
+                   <div class="search-item col-span-2 flex items-center justify-between rounded-2xl border border-yellow-200 bg-yellow-50 p-4 dark:border-yellow-700/50 dark:bg-yellow-900/20">
+                      <div>
+                          <h4 class="text-sm font-bold text-yellow-800 dark:text-yellow-400" data-translate="card_guide">Mental Wellness Guide</h4>
+                          <p class="text-xs text-gray-600 dark:text-gray-400">Sleep hygiene & diet tips.</p>
+                      </div>
+                      <button onclick="openWellnessModal()" class="rounded bg-white px-3 py-1.5 text-xs font-bold shadow-sm transition hover:bg-gray-100 dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700">Read</button>
+                   </div>
+                </div>
+            </div>
 
-               <div onclick="openPeerPage()" class="btn-click search-item cursor-pointer rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition hover:shadow-md dark:border-slate-800 dark:bg-slate-900">
-                  <i class="ph ph-users-three mb-2 text-3xl text-indigo-500"></i>
-                  <h4 class="text-sm font-bold text-gray-800 dark:text-gray-200" data-translate="card_peer">Peer Forum</h4>
-                  <p class="text-xs opacity-60">Exam Stress Group</p>
+            <h3 class="mb-3 mt-8 flex items-center gap-2 text-xl font-bold text-red-600" data-translate="title_emergency"><i class="ph ph-siren"></i> Emergency</h3>
+            <div class="mb-8 rounded-2xl border border-red-100 bg-red-50 p-4 transition-colors dark:border-red-900/50 dark:bg-red-900/10">
+               <div class="mb-4 grid grid-cols-3 gap-2">
+                  <a href="tel:108" class="btn-click rounded-xl bg-white p-3 text-center shadow-sm transition hover:bg-red-50 dark:bg-slate-800 dark:hover:bg-red-900/20"><i class="ph ph-ambulance text-2xl text-red-600"></i><div class="mt-1 text-xs font-bold dark:text-white" data-translate="btn_amb">108</div></a>
+                  <a href="tel:100" class="btn-click rounded-xl bg-white p-3 text-center shadow-sm transition hover:bg-blue-50 dark:bg-slate-800 dark:hover:bg-blue-900/20"><i class="ph ph-shield-check text-2xl text-blue-600"></i><div class="mt-1 text-xs font-bold dark:text-white" data-translate="btn_police">100</div></a>
+                  <a href="tel:14416" class="btn-click col-span-1 rounded-xl bg-yellow-100 p-3 text-center shadow-sm transition hover:bg-yellow-200 dark:bg-yellow-900/40 dark:hover:bg-yellow-900/60"><i class="ph ph-phone-call text-2xl text-yellow-700"></i><div class="mt-1 text-xs font-bold text-yellow-800 dark:text-yellow-400" data-translate="btn_helpline">Tele-Manas</div></a>
                </div>
-               <div onclick="openAudioPage()" class="btn-click search-item cursor-pointer rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition hover:shadow-md dark:border-slate-800 dark:bg-slate-900">
-                  <i class="ph ph-headphones mb-2 text-3xl text-purple-500"></i>
-                  <h4 class="text-sm font-bold text-gray-800 dark:text-gray-200" data-translate="card_audio">Relax Audio</h4>
-                  <p class="text-xs opacity-60">Deep Breathing</p>
-               </div>
-               
-               <div class="search-item col-span-2 flex items-center justify-between rounded-2xl border border-yellow-200 bg-yellow-50 p-4 dark:border-yellow-700/50 dark:bg-yellow-900/20">
-                  <div>
-                      <h4 class="text-sm font-bold text-yellow-800 dark:text-yellow-400" data-translate="card_guide">Mental Wellness Guide</h4>
-                      <p class="text-xs text-gray-600 dark:text-gray-400">Sleep hygiene & diet tips.</p>
-                  </div>
-                  <button onclick="openWellnessModal()" class="rounded bg-white px-3 py-1.5 text-xs font-bold shadow-sm transition hover:bg-gray-100 dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700">Read</button>
-               </div>
+               <button onclick="openAiFirstAid()" class="btn-click mb-2 w-full rounded-xl border-2 border-red-500 bg-white py-3 text-sm font-bold text-red-600 shadow transition hover:bg-red-50 dark:bg-slate-800">
+                   <i class="ph ph-first-aid-kit text-lg"></i> AI First Aid Assistant
+               </button>
+               <button onclick="locateMe()" class="btn-click mb-4 w-full rounded-xl bg-red-600 py-3 text-sm font-bold text-white shadow transition hover:bg-red-700" data-translate="btn_locate">📍 Find Nearby Hospitals</button>
+               <div class="map-container border bg-gray-200 shadow-inner dark:border-slate-700"><div id="map" class="h-full w-full"></div></div>
             </div>
         </div>
 
-        <h3 class="mb-3 mt-8 flex items-center gap-2 text-xl font-bold text-red-600" data-translate="title_emergency"><i class="ph ph-siren"></i> Emergency</h3>
-        <div class="mb-8 rounded-2xl border border-red-100 bg-red-50 p-4 transition-colors dark:border-red-900/50 dark:bg-red-900/10">
-           <div class="mb-4 grid grid-cols-3 gap-2">
-              <a href="tel:108" class="btn-click rounded-xl bg-white p-3 text-center shadow-sm transition hover:bg-red-50 dark:bg-slate-800 dark:hover:bg-red-900/20"><i class="ph ph-ambulance text-2xl text-red-600"></i><div class="mt-1 text-xs font-bold dark:text-white" data-translate="btn_amb">108</div></a>
-              <a href="tel:100" class="btn-click rounded-xl bg-white p-3 text-center shadow-sm transition hover:bg-blue-50 dark:bg-slate-800 dark:hover:bg-blue-900/20"><i class="ph ph-shield-check text-2xl text-blue-600"></i><div class="mt-1 text-xs font-bold dark:text-white" data-translate="btn_police">100</div></a>
-              <a href="tel:14416" class="btn-click col-span-1 rounded-xl bg-yellow-100 p-3 text-center shadow-sm transition hover:bg-yellow-200 dark:bg-yellow-900/40 dark:hover:bg-yellow-900/60"><i class="ph ph-phone-call text-2xl text-yellow-700"></i><div class="mt-1 text-xs font-bold text-yellow-800 dark:text-yellow-400" data-translate="btn_helpline">Tele-Manas</div></a>
-           </div>
-           
-           <button onclick="openAiFirstAid()" class="btn-click mb-2 w-full rounded-xl border-2 border-red-500 bg-white py-3 text-sm font-bold text-red-600 shadow transition hover:bg-red-50 dark:bg-slate-800">
-               <i class="ph ph-first-aid-kit text-lg"></i> AI First Aid Assistant
-           </button>
+        <!-- COUNSELLOR DASHBOARD -->
+        <div id="counsellorDashboard" class="hidden space-y-6">
+            <div class="animate-fade-in relative flex flex-col justify-between overflow-hidden rounded-3xl bg-gradient-to-r from-purple-600 to-indigo-700 p-6 text-white shadow-xl dark:from-purple-900 dark:to-slate-800">
+              <div class="relative z-10">
+                <span class="mb-2 inline-block rounded-full bg-white/20 px-2 py-0.5 text-xs font-bold">Counsellor Portal</span>
+                <h2 class="mb-1 text-2xl font-extrabold">Welcome, Specialist Specialist 👋</h2>
+                <p class="text-sm opacity-90">Manage client calls, check screenings, and log diagnoses.</p>
+              </div>
+              <div class="mt-4 flex gap-4 text-center">
+                 <div class="bg-white/15 flex-1 rounded-xl p-2 backdrop-blur-sm"><div class="text-lg font-bold">3</div><div class="text-[9px] uppercase opacity-75">Scheduled</div></div>
+                 <div class="bg-white/15 flex-1 rounded-xl p-2 backdrop-blur-sm"><div class="text-lg font-bold">12</div><div class="text-[9px] uppercase opacity-75">Total Sessions</div></div>
+                 <div class="bg-white/15 flex-1 rounded-xl p-2 backdrop-blur-sm"><div class="text-lg font-bold">1</div><div class="text-[9px] uppercase opacity-75">Alerts</div></div>
+              </div>
+            </div>
 
-           <button onclick="locateMe()" class="btn-click mb-4 w-full rounded-xl bg-red-600 py-3 text-sm font-bold text-white shadow transition hover:bg-red-700" data-translate="btn_locate">📍 Find Nearby Hospitals</button>
-           <div class="map-container border bg-gray-200 shadow-inner dark:border-slate-700"><div id="map" class="h-full w-full"></div></div>
+            <!-- Virtual Consultation Room (Active Session Room) -->
+            <div id="teleconsultRoom" class="animate-fade-in hidden space-y-4 rounded-2xl border border-purple-200 bg-purple-50/30 p-5 dark:border-slate-800 dark:bg-slate-900/50">
+                <div class="flex items-center justify-between border-b pb-3 dark:border-slate-800">
+                    <div>
+                        <h3 class="text-md flex items-center gap-1.5 font-bold text-purple-800 dark:text-purple-400"><i class="ph ph-video-camera"></i> Live Consultation Room</h3>
+                        <p class="text-xs text-gray-500">Patient: <span id="teleconsultPatientName" class="font-bold">Sumit</span></p>
+                    </div>
+                    <span class="rounded bg-red-100 px-2 py-1 font-mono text-xs font-bold text-red-600" id="teleconsultTimer">00:00</span>
+                </div>
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div class="relative flex h-40 items-center justify-center overflow-hidden rounded-xl bg-slate-900">
+                        <span class="absolute left-2 top-2 rounded bg-black/60 px-2 py-0.5 text-[10px] text-white">Specialist Camera (Simulated)</span>
+                        <div class="text-center text-white"><i class="ph ph-user-circle animate-pulse text-4xl"></i><p class="mt-1 text-xs">Camera Feed Active</p></div>
+                    </div>
+                    <div class="flex h-40 flex-col rounded-xl border bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+                        <div class="mb-1 text-xs font-bold text-gray-400">Live Vitals & Mood Indicators</div>
+                        <div class="grid flex-1 grid-cols-2 gap-2 text-center">
+                            <div class="flex flex-col justify-center rounded-lg bg-red-50 p-2 dark:bg-red-950/20"><span class="text-xs text-red-700">Heart Rate</span><strong class="text-sm dark:text-white">84 BPM</strong></div>
+                            <div class="flex flex-col justify-center rounded-lg bg-blue-50 p-2 dark:bg-blue-950/20"><span class="text-xs text-blue-700">Mood State</span><strong class="text-sm dark:text-white">Anxious</strong></div>
+                            <div class="flex flex-col justify-center rounded-lg bg-green-50 p-2 dark:bg-green-950/20"><span class="text-xs text-green-700">Exam Stress</span><strong class="text-sm dark:text-white">High</strong></div>
+                            <div class="flex flex-col justify-center rounded-lg bg-purple-50 p-2 dark:bg-purple-950/20"><span class="text-xs text-purple-700">PHQ-9 Index</span><strong class="text-sm dark:text-white">Moderate</strong></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="simulatePatientChat()" class="btn-click flex-1 rounded-xl bg-purple-600 py-3 text-xs font-bold text-white hover:bg-purple-700">Simulate Patient Message</button>
+                    <button onclick="closeActiveConsultRoom()" class="btn-click rounded-xl border border-red-500 bg-white px-4 py-3 text-xs font-bold text-red-500 hover:bg-red-50 dark:bg-slate-800">End Session</button>
+                </div>
+            </div>
+
+            <!-- Patient File Explorer -->
+            <div class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                <h3 class="mb-3 flex items-center gap-2 text-lg font-bold dark:text-white"><i class="ph ph-folder text-yellow-500"></i> Interactive Patient File Explorer</h3>
+                <div class="space-y-3">
+                    <select id="patientSelectExplorer" onchange="explorePatientProfile(this.value)" class="w-full rounded-xl border p-3 text-sm dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                        <option value="khushi">Sumit (Student - Moderate Risk)</option>
+                        <option value="rahul">Rahul K. (Student - Low Risk)</option>
+                        <option value="amit">Amit S. (Student - Mild Stress)</option>
+                        <option value="khushi">Khushi (Student - Moderate Risk)</option>
+                        <option value="rahul">Aman K. (Student - Low Risk)</option>
+                        <option value="amit">Krish s. (Student - Mild Stress)</option>
+                    </select>
+                    <div id="patientExplorerContent" class="space-y-2 rounded-xl border bg-gray-50 p-4 text-xs dark:border-slate-700 dark:bg-slate-800">
+                        <div class="flex items-center justify-between font-bold">
+                            <span class="text-sm dark:text-white" id="expName">Sumit</span>
+                            <span class="rounded bg-red-100 px-2 py-0.5 text-[10px] text-red-700" id="expRisk">Moderate Risk</span>
+                        </div>
+                        <p class="text-gray-500" id="expSummary">Primary complaint: High academic distress related to upcoming mathematics and statistics finals. Reporting irregular sleep hygiene and minor panic symptoms.</p>
+                        <div class="mt-2 grid grid-cols-2 gap-2 border-t pt-2 dark:border-slate-700">
+                            <div><span class="text-[10px] text-gray-400">PHQ-9 Score</span><div class="font-bold dark:text-white" id="expScore">12 / 27</div></div>
+                            <div><span class="text-[10px] text-gray-400">Assigned Exercises</span><div class="font-bold dark:text-white" id="expExercises">4-7-8 Breathing Loop, Relax Audio</div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prescription & Therapy Builder -->
+            <div class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                <h3 class="mb-3 flex items-center gap-2 text-lg font-bold dark:text-white"><i class="ph ph-prescription text-purple-600"></i> Clinical Therapy Plan Builder</h3>
+                <form onsubmit="generateDigitalPrescription(event)" class="space-y-3">
+                    <div>
+                        <label class="mb-1 block text-xs font-bold uppercase text-gray-500">Target Patient</label>
+                        <input type="text" id="prescPatient" required value="Khushi" class="w-full rounded-xl border p-3 text-sm dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                    </div>
+                    <div>
+                        <label class="mb-1 block text-xs font-bold uppercase text-gray-500">Prescribed Relaxation Exercise</label>
+                        <select id="prescExercise" class="w-full rounded-xl border p-3 text-sm dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                            <option value="breath478">Guided 4-7-8 Breathing Loop</option>
+                            <option value="deepsleep">Deep Breathing Soundscape</option>
+                            <option value="detox">Digital Detox Screen Lockout</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="mb-1 block text-xs font-bold uppercase text-gray-500">Additional Therapist Instructions</label>
+                        <textarea id="prescInstructions" required placeholder="Perform 4-7-8 breathing loop twice daily before bedtime..." class="w-full rounded-xl border p-3 text-sm dark:border-slate-700 dark:bg-slate-800 dark:text-white" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn-click w-full rounded-xl bg-purple-600 py-3 font-bold text-white hover:bg-purple-700">Compile & Issue Prescription Card</button>
+                </form>
+            </div>
+
+            <!-- Appointments List -->
+            <div class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                <h3 class="mb-4 flex items-center gap-2 text-lg font-bold dark:text-white"><i class="ph ph-calendar text-purple-600"></i> Scheduled Consultations</h3>
+                <div class="space-y-3" id="counsellorAppointments">
+                    <!-- Scheduled items dynamically filled -->
+                </div>
+            </div>
+
+            <!-- Client Logs -->
+            <div class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                <h3 class="mb-4 flex items-center gap-2 text-lg font-bold dark:text-white"><i class="ph ph-clipboard-text text-indigo-500"></i> Client Screening Logs (PHQ-9)</h3>
+                <div class="space-y-3" id="counsellorScreenings">
+                    <!-- Screenings injected -->
+                </div>
+            </div>
+
+            <!-- Consult Note Form -->
+            <div class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                <h3 class="mb-3 text-lg font-bold dark:text-white">Add Consultation Log Note</h3>
+                <form onsubmit="saveConsultationNote(event)" class="space-y-3">
+                    <input type="text" id="consultClientName" required placeholder="Client Name" class="w-full rounded-xl border p-3 text-sm dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                    <textarea id="consultNotes" required placeholder="Diagnosis, prescription, and notes..." class="w-full rounded-xl border p-3 text-sm dark:border-slate-700 dark:bg-slate-800 dark:text-white" rows="3"></textarea>
+                    <button type="submit" class="btn-click w-full rounded-xl bg-purple-600 py-3 font-bold text-white hover:bg-purple-700">Save Consultation Note</button>
+                </form>
+            </div>
         </div>
-    </div> 
+
+        <!-- ADMIN DASHBOARD -->
+        <div id="adminDashboard" class="hidden space-y-6">
+            <div class="animate-fade-in relative flex items-center justify-between overflow-hidden rounded-3xl bg-gradient-to-r from-red-600 to-orange-600 p-6 text-white shadow-xl dark:from-red-950 dark:to-slate-800">
+              <div class="relative z-10 flex-1">
+                <span class="mb-2 inline-block rounded-full bg-white/20 px-2 py-0.5 text-xs font-bold">Admin Operations Panel</span>
+                <h2 class="mb-1 text-2xl font-extrabold">The Protector Administration Console Console Dashboard 🛡️</h2>
+                <p class="text-sm opacity-90">Monitor global system metrics, user roles, database audits.</p>
+              </div>
+            </div>
+
+            <!-- System Statistics -->
+            <div class="grid grid-cols-2 gap-4">
+                <div class="rounded-2xl border border-gray-100 bg-white p-4 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                    <div class="text-2xl font-extrabold text-blue-600">324</div>
+                    <div class="text-[10px] font-bold uppercase text-gray-500">Registered Students</div>
+                </div>
+                <div class="rounded-2xl border border-gray-100 bg-white p-4 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                    <div class="text-2xl font-extrabold text-purple-600">8</div>
+                    <div class="text-[10px] font-bold uppercase text-gray-500">Active Specialists</div>
+                </div>
+                <div class="rounded-2xl border border-gray-100 bg-white p-4 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                    <div class="text-2xl font-extrabold text-teal-600">145</div>
+                    <div class="text-[10px] font-bold uppercase text-gray-500">Successful Sessions</div>
+                </div>
+                <div class="rounded-2xl border border-gray-100 bg-white p-4 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                    <div class="text-2xl font-extrabold text-red-600">14</div>
+                    <div class="text-[10px] font-bold uppercase text-gray-500">High Risk Triggers</div>
+                </div>
+            </div>
+
+            <!-- System Health Monitors -->
+            <div class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                 <h3 class="mb-3 flex items-center gap-1.5 text-lg font-bold dark:text-white"><i class="ph ph-cpu animate-spin text-blue-500"></i> Server & DB Operations Health Gauges</h3>
+                 <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                     <div class="rounded-xl bg-gray-50 p-3 dark:bg-slate-800">
+                         <span class="mb-1 block text-gray-400">API Latency</span>
+                         <strong class="text-sm text-green-600">14 ms</strong>
+                     </div>
+                     <div class="rounded-xl bg-gray-50 p-3 dark:bg-slate-800">
+                         <span class="mb-1 block text-gray-400">CPU Utilization</span>
+                         <strong class="text-sm text-blue-600">22%</strong>
+                     </div>
+                     <div class="rounded-xl bg-gray-50 p-3 dark:bg-slate-800">
+                         <span class="mb-1 block text-gray-400">DB Pool Size</span>
+                         <strong class="text-sm text-purple-600">5 / 10 Active</strong>
+                     </div>
+                 </div>
+            </div>
+
+            <!-- Analytics and stress trends -->
+            <div class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                 <h3 class="mb-4 text-lg font-bold dark:text-white">Community Stress Level Analytics</h3>
+                 <div class="h-48"><canvas id="chartAnalytics"></canvas></div>
+            </div>
+
+            <!-- Real-time Database Audit & Security Logs -->
+            <div class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                <h3 class="mb-3 flex items-center gap-2 text-lg font-bold dark:text-white"><i class="ph ph-list-bullets text-red-500"></i> DB Operations Audit & Security Alert Stream</h3>
+                <div class="scrollbar max-h-40 space-y-2 overflow-y-auto text-xs" id="adminAuditLogs">
+                    <div class="rounded border-l-4 border-blue-500 bg-slate-50 p-2 dark:bg-slate-800"><span class="font-bold">[INFO]</span> 01:22:15 - Successful login: student@college.edu</div>
+                    <div class="rounded border-l-4 border-yellow-500 bg-slate-50 p-2 dark:bg-slate-800"><span class="font-bold">[WARNING]</span> 01:22:45 - PHQ-9 screening score threshold exceeded for Sumit (Score: 12)</div>
+                    <div class="rounded border-l-4 border-green-500 bg-slate-50 p-2 dark:bg-slate-800"><span class="font-bold">[SUCCESS]</span> 01:23:02 - Seed Database initialization successful</div>
+                </div>
+            </div>
+
+            <!-- User Database Management -->
+            <div class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                 <h3 class="mb-4 text-lg font-bold dark:text-white">User Records & Role Management</h3>
+                 <div class="mb-4">
+                     <input type="text" id="adminUserSearch" onkeyup="filterAdminUsers()" placeholder="Search user by name or email..." class="w-full rounded-xl border p-3 text-sm dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                 </div>
+                 <div class="overflow-x-auto">
+                     <table class="w-full border-collapse text-left text-xs">
+                         <thead>
+                             <tr class="border-b text-gray-500 dark:border-slate-800"><th class="pb-2">User</th><th class="pb-2">Role</th><th class="pb-2">Status</th><th class="pb-2">Action</th></tr>
+                         </thead>
+                         <tbody id="adminUserTable">
+                             <!-- Injected users list -->
+                         </tbody>
+                     </table>
+                 </div>
+            </div>
+        </div>
+
+        <!-- EMPLOYER DASHBOARD -->
+        <div id="employerDashboard" class="hidden space-y-6">
+            <div class="animate-fade-in relative flex items-center justify-between overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-600 to-teal-700 p-6 text-white shadow-xl dark:from-emerald-950 dark:to-slate-800">
+              <div class="relative z-10 flex-1">
+                <span class="mb-2 inline-block rounded-full bg-white/20 px-2 py-0.5 text-xs font-bold">The Protector Corporate Dashboard</span>
+                <h2 class="mb-1 text-2xl font-extrabold">Welcome, Corporate Partner 👋</h2>
+                <p class="text-sm opacity-90">Monitor organizational well-being, schedule stress relief seminars, and manage employee support plans.</p>
+              </div>
+            </div>
+
+            <!-- Organizational Statistics -->
+            <div class="grid grid-cols-2 gap-4">
+                <div class="rounded-2xl border border-gray-100 bg-white p-4 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                    <div class="text-2xl font-extrabold text-emerald-600" id="empTotalCount">156</div>
+                    <div class="text-[10px] font-bold uppercase text-gray-500">Active Employees</div>
+                </div>
+                <div class="rounded-2xl border border-gray-100 bg-white p-4 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                    <div class="text-2xl font-extrabold text-teal-600" id="empAvgPHQ">5.4 / 27</div>
+                    <div class="text-[10px] font-bold uppercase text-gray-500">Avg Wellness Score</div>
+                </div>
+                <div class="rounded-2xl border border-gray-100 bg-white p-4 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                    <div class="text-2xl font-extrabold text-indigo-600" id="empActiveConsultations">18</div>
+                    <div class="text-[10px] font-bold uppercase text-gray-500">Therapy Sessions</div>
+                </div>
+                <div class="rounded-2xl border border-gray-100 bg-white p-4 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                    <div class="text-2xl font-extrabold text-purple-600" id="empEngagementRate">82%</div>
+                    <div class="text-[10px] font-bold uppercase text-gray-500">Program Engagement</div>
+                </div>
+            </div>
+
+            <!-- Anxiety & Burnout trends -->
+            <div class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                 <h3 class="mb-4 text-lg font-bold dark:text-white">Organizational Stress & Anxiety Trends</h3>
+                 <div class="h-48"><canvas id="chartEmployerAnalytics"></canvas></div>
+            </div>
+
+            <!-- Corporate Wellness Workshop Scheduler -->
+            <div class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                <h3 class="mb-3 text-lg font-bold dark:text-white">Book Corporate Mental Wellness Session</h3>
+                <form onsubmit="scheduleCorporateWorkshop(event)" class="space-y-3">
+                    <select id="workshopType" required class="w-full rounded-xl border p-3 text-sm dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                        <option value="mindfulness">Mindfulness & Meditation workshop</option>
+                        <option value="burnout">Preventing Burnout Seminar</option>
+                        <option value="stress">Workplace Stress Management</option>
+                        <option value="firstaid">Basic First Aid & Panic Response Training</option>
+                    </select>
+                    <div class="grid grid-cols-2 gap-3">
+                        <input type="date" id="workshopDate" required class="w-full rounded-xl border p-3 text-sm dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                        <input type="time" id="workshopTime" required class="w-full rounded-xl border p-3 text-sm dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                    </div>
+                    <button type="submit" class="btn-click w-full rounded-xl bg-emerald-600 py-3 font-bold text-white hover:bg-emerald-700">Schedule Group Session</button>
+                </form>
+            </div>
+
+            <!-- Active Campaigns -->
+            <div class="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                 <h3 class="mb-4 text-lg font-bold dark:text-white">Corporate Wellness Initiatives</h3>
+                 <div class="space-y-3" id="activeCampaignsList">
+                     <!-- Campaign items dynamically filled -->
+                 </div>
+            </div>
+        </div>
+
+    </div>
 
     <div id="symptomPage" class="animate-fade-in hidden h-full flex-col">
         <div class="mb-4 flex items-center gap-3">
             <button onclick="goBack()" class="rounded-full bg-gray-100 p-2 text-xl hover:bg-gray-200 dark:bg-slate-800 dark:text-white"><i class="ph ph-arrow-left"></i></button>
-            <h2 class="text-xl font-bold dark:text-white">AI Symptom Checker</h2>
+            <h2 class="text-xl font-bold dark:text-white">AI Advanced Symptom Checker</h2>
         </div>
-        <div class="flex-1 rounded-2xl border border-teal-100 bg-teal-50 p-4 dark:border-slate-700 dark:bg-slate-800">
-            <div class="mb-6 text-center">
-                <div class="mb-2 inline-block rounded-full bg-teal-100 p-4"><i class="ph ph-stethoscope text-4xl text-teal-600"></i></div>
-                <h3 class="text-lg font-bold dark:text-white">Tell us how you feel</h3>
-                <p class="text-sm text-gray-500">I will analyze your symptoms.</p>
+        
+        <div class="no-scrollbar flex-1 overflow-y-auto rounded-3xl border border-teal-100 bg-teal-50/30 p-5 dark:border-slate-800 dark:bg-slate-900/50">
+            <!-- Form View -->
+            <div id="symptomFormView" class="space-y-5">
+                <div class="mb-4 text-center">
+                    <div class="mb-2 inline-block rounded-full bg-teal-100 p-3 text-teal-600"><i class="ph ph-stethoscope text-3xl"></i></div>
+                    <h3 class="text-lg font-bold dark:text-white">Clinical Symptom Intake</h3>
+                    <p class="text-xs text-gray-500">Provide details for an automated triage assessment.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="mb-1 block text-xs font-bold uppercase text-gray-500 dark:text-gray-400">Primary Discomfort Area</label>
+                        <select id="symptomLocation" class="w-full rounded-xl border border-gray-200 bg-white p-3 text-sm outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                            <option value="head">Head (Headache, Dizziness, Migraine)</option>
+                            <option value="chest">Chest (Tightness, Pain, Breathlessness)</option>
+                            <option value="stomach">Stomach (Nausea, Abdominal pain, Cramps)</option>
+                            <option value="general">Whole Body (Fatigue, Bodyache, Fever)</option>
+                            <option value="mental">Mental Health (Panic, Anxiety, Extreme Sadness)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="mb-1 block text-xs font-bold uppercase text-gray-500 dark:text-gray-400">Symptom Duration</label>
+                        <select id="symptomDuration" class="w-full rounded-xl border border-gray-200 bg-white p-3 text-sm outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                            <option value="brief">Less than 24 hours</option>
+                            <option value="medium">1 to 3 days</option>
+                            <option value="long">More than 3 days</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <div class="mb-1 flex items-center justify-between">
+                            <label class="block text-xs font-bold uppercase text-gray-500 dark:text-gray-400">Severity Intensity</label>
+                            <span class="text-sm font-extrabold text-teal-600" id="severityDisplayValue">5 / 10</span>
+                        </div>
+                        <input type="range" id="symptomSeverity" min="1" max="10" value="5" oninput="document.getElementById('severityDisplayValue').innerText = this.value + ' / 10'" class="h-2 w-full cursor-pointer appearance-none rounded-lg bg-gray-200 accent-teal-600 dark:bg-gray-700">
+                    </div>
+
+                    <div>
+                        <label class="mb-1 block text-xs font-bold uppercase text-gray-500 dark:text-gray-400">Additional Symptoms & Notes</label>
+                        <textarea id="symptomNotes" class="w-full rounded-xl border border-gray-200 bg-white p-3 text-sm outline-none focus:border-teal-500 dark:border-slate-700 dark:bg-slate-800 dark:text-white" rows="3" placeholder="Describe how you feel (e.g. high fever, dry cough, throbbing temple pain)..."></textarea>
+                    </div>
+
+                    <button onclick="runSymptomAnalysis()" class="btn-click flex w-full items-center justify-center gap-2 rounded-xl bg-teal-600 py-3.5 font-bold text-white shadow-lg transition hover:bg-teal-700">
+                        <i class="ph ph-activity animate-pulse text-xl"></i> Analyze Symptoms
+                    </button>
+                </div>
             </div>
-            <div class="space-y-4">
-                 <label class="block text-sm font-bold dark:text-white">Where is the pain/discomfort?</label>
-                 <select class="w-full rounded-xl border p-3 dark:border-slate-600 dark:bg-slate-900 dark:text-white"><option>Head</option><option>Stomach</option><option>Chest</option><option>Whole Body</option><option>Mental Health</option></select>
-                 
-                 <label class="block text-sm font-bold dark:text-white">Describe Intensity (1-10)</label>
-                 <input type="range" class="w-full accent-teal-600">
-                 
-                 <label class="block text-sm font-bold dark:text-white">Additional Notes</label>
-                 <textarea class="w-full rounded-xl border p-3 dark:border-slate-600 dark:bg-slate-900 dark:text-white" rows="3" placeholder="e.g. Throbbing pain, dizziness..."></textarea>
-                 
-                 <button onclick="alert('AI Analysis: Based on your input, this might be a Tension Headache. Please rest and hydrate. If it persists, consult a doctor via Tele-Medicine.')" class="w-full rounded-xl bg-teal-600 py-3 font-bold text-white shadow-lg hover:bg-teal-700">Analyze Symptoms</button>
+
+            <!-- Results View (Hidden initially) -->
+            <div id="symptomResultView" class="animate-fade-in hidden space-y-5">
+                <div class="text-center">
+                    <h3 class="text-lg font-bold dark:text-white">Symptom Assessment Results</h3>
+                    <p class="text-xs text-gray-500">Based on artificial intelligence logic analysis.</p>
+                </div>
+
+                <!-- Severity Banner -->
+                <div id="symptomSeverityBanner" class="rounded-2xl border p-4 text-center">
+                    <span class="block text-[10px] font-bold uppercase tracking-wider" id="resultTriageLabel">Triage Level</span>
+                    <h4 class="text-xl font-extrabold" id="resultTriageValue">MODERATE RISK</h4>
+                    <p class="mt-1 text-xs" id="resultTriageDesc">We recommend scheduling a medical review.</p>
+                </div>
+
+                <!-- Analysis breakdown -->
+                <div class="space-y-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-800">
+                    <div>
+                        <span class="text-[10px] font-bold uppercase text-gray-400">Potential Causes</span>
+                        <p class="text-sm font-bold dark:text-white" id="resultPotentialCause">Tension Headache / Dehydration</p>
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-bold uppercase text-gray-400">Care Recommendations</span>
+                        <p class="text-xs text-gray-600 dark:text-gray-300" id="resultRecommendations">Drink fluids, rest in a quiet, dark room, and avoid screens.</p>
+                    </div>
+                </div>
+
+                <div class="rounded-xl border border-yellow-200 bg-yellow-50/50 p-3 text-[11px] text-yellow-800 dark:border-yellow-900/50 dark:bg-yellow-950/20 dark:text-yellow-300">
+                    <strong>Medical Disclaimer:</strong> This checker does not replace a doctor. If you have chest tightness, shortness of breath, or severe pain, seek emergency care immediately.
+                </div>
+
+                <div class="flex flex-col gap-2">
+                    <button id="symptomActionBtn" onclick="openTeleModal()" class="btn-click w-full rounded-xl bg-blue-600 py-3 text-sm font-bold text-white shadow hover:bg-blue-700">📅 Consult a Doctor</button>
+                    <button onclick="resetSymptomChecker()" class="btn-click w-full rounded-xl border border-gray-200 bg-white py-3 text-sm font-bold text-gray-700 hover:bg-gray-50 dark:border-slate-800 dark:bg-slate-800 dark:text-white">← Check Another Symptom</button>
+                </div>
             </div>
         </div>
     </div>
 
     <div id="firstAidPage" class="animate-fade-in hidden h-full flex-col">
-        <div class="mb-4 flex items-center gap-3">
-            <button onclick="goBack()" class="rounded-full bg-gray-100 p-2 text-xl hover:bg-gray-200 dark:bg-slate-800 dark:text-white"><i class="ph ph-arrow-left"></i></button>
-            <h2 class="text-xl font-bold text-red-600">AI First Aid Assistant</h2>
+        <div class="mb-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <button onclick="goBack()" class="rounded-full bg-gray-100 p-2 text-xl hover:bg-gray-200 dark:bg-slate-800 dark:text-white"><i class="ph ph-arrow-left"></i></button>
+                <h2 class="text-xl font-bold text-red-600">AI Emergency First Aid</h2>
+            </div>
+            <button onclick="window.speechSynthesis.cancel()" class="hidden rounded-full bg-red-100 p-2 text-red-600 hover:bg-red-200 dark:bg-slate-800 dark:text-red-400" id="stopSpeechBtn" title="Stop Audio Guide"><i class="ph ph-speaker-slash text-xl"></i></button>
         </div>
-        <div class="grid grid-cols-2 gap-4">
-            <button onclick="alert('Instructions for Cuts: Apply pressure to stop bleeding. Clean with water. Apply bandage.')" class="rounded-2xl border border-red-100 bg-red-50 p-6 text-center hover:bg-red-100 dark:border-red-800 dark:bg-red-900/20">
+
+        <!-- Search Bar -->
+        <div class="relative mb-4">
+            <i class="ph ph-magnifying-glass absolute left-3 top-3 text-gray-400"></i>
+            <input type="text" id="firstAidSearch" onkeyup="filterFirstAid()" placeholder="Search first aid guidelines (e.g. burn, cut, bite)..." class="w-full rounded-xl border border-gray-200 bg-white p-3 pl-10 text-sm outline-none transition focus:border-red-500 focus:ring-1 focus:ring-red-500 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+        </div>
+
+        <!-- First Aid Grid -->
+        <div class="grid grid-cols-2 gap-3" id="firstAidGrid">
+            <!-- Cuts -->
+            <div onclick="openFirstAidDetails('bleeding')" class="first-aid-card cursor-pointer rounded-2xl border border-red-100 bg-red-50 p-4 text-center shadow-sm transition hover:bg-red-100 dark:border-red-950 dark:bg-red-950/20">
                 <i class="ph ph-bandaids mb-2 text-4xl text-red-500"></i>
-                <div class="font-bold dark:text-white">Bleeding / Cuts</div>
-            </button>
-            <button onclick="alert('Instructions for Burns: Hold under cool (not cold) running water for 10-15 mins. Do not pop blisters.')" class="rounded-2xl border border-orange-100 bg-orange-50 p-6 text-center hover:bg-orange-100 dark:border-orange-800 dark:bg-orange-900/20">
+                <div class="text-sm font-bold dark:text-white">Bleeding / Cuts</div>
+                <p class="mt-1 text-[10px] text-gray-500">Pressure & bandaging</p>
+            </div>
+            <!-- Burns -->
+            <div onclick="openFirstAidDetails('burn')" class="first-aid-card cursor-pointer rounded-2xl border border-orange-100 bg-orange-50 p-4 text-center shadow-sm transition hover:bg-orange-100 dark:border-orange-950 dark:bg-orange-950/20">
                 <i class="ph ph-fire mb-2 text-4xl text-orange-500"></i>
-                <div class="font-bold dark:text-white">Burns</div>
-            </button>
-            <button onclick="alert('Panic Attack Help: 1. Sit down. 2. Breathe in for 4s, hold for 4s, out for 4s. 3. Name 5 things you can see.')" class="rounded-2xl border border-blue-100 bg-blue-50 p-6 text-center hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-900/20">
-                <i class="ph ph-brain mb-2 text-4xl text-blue-500"></i>
-                <div class="font-bold dark:text-white">Panic Attack</div>
-            </button>
-            <button onclick="alert('CPR Guide: Push hard and fast in center of chest. 100-120 compressions per minute.')" class="rounded-2xl border border-gray-100 bg-gray-50 p-6 text-center hover:bg-gray-100 dark:bg-slate-800">
-                <i class="ph ph-heartbeat mb-2 text-4xl text-gray-500"></i>
-                <div class="font-bold dark:text-white">CPR Guide</div>
-            </button>
+                <div class="text-sm font-bold dark:text-white">Burns</div>
+                <p class="mt-1 text-[10px] text-gray-500">Cooling & covering</p>
+            </div>
+            <!-- CPR -->
+            <div onclick="openFirstAidDetails('cpr')" class="first-aid-card cursor-pointer rounded-2xl border border-blue-100 bg-blue-50 p-4 text-center shadow-sm transition hover:bg-blue-100 dark:border-blue-950 dark:bg-blue-950/20">
+                <i class="ph ph-heartbeat mb-2 text-4xl text-blue-500"></i>
+                <div class="text-sm font-bold dark:text-white">CPR Guide</div>
+                <p class="mt-1 text-[10px] text-gray-500">Chest compressions</p>
+            </div>
+            <!-- Choking -->
+            <div onclick="openFirstAidDetails('choking')" class="first-aid-card cursor-pointer rounded-2xl border border-purple-100 bg-purple-50 p-4 text-center shadow-sm transition hover:bg-purple-100 dark:border-purple-950 dark:bg-purple-950/20">
+                <i class="ph ph-wind mb-2 text-4xl text-purple-500"></i>
+                <div class="text-sm font-bold dark:text-white">Choking</div>
+                <p class="mt-1 text-[10px] text-gray-500">Heimlich maneuver</p>
+            </div>
+            <!-- Snakebites -->
+            <div onclick="openFirstAidDetails('bites')" class="first-aid-card cursor-pointer rounded-2xl border border-yellow-100 bg-yellow-50 p-4 text-center shadow-sm transition hover:bg-yellow-100 dark:border-yellow-950 dark:bg-yellow-950/20">
+                <i class="ph ph-bug mb-2 text-4xl text-yellow-600"></i>
+                <div class="text-sm font-bold dark:text-white">Bites & Stings</div>
+                <p class="mt-1 text-[10px] text-gray-500">Snake, bee, scorpion</p>
+            </div>
+            <!-- Panic Attacks -->
+            <div onclick="openFirstAidDetails('panic')" class="first-aid-card cursor-pointer rounded-2xl border border-teal-100 bg-teal-50 p-4 text-center shadow-sm transition hover:bg-teal-100 dark:border-teal-950 dark:bg-teal-950/20">
+                <i class="ph ph-brain mb-2 text-4xl text-teal-600"></i>
+                <div class="text-sm font-bold dark:text-white">Panic Attack</div>
+                <p class="mt-1 text-[10px] text-gray-500">Breathing & grounding</p>
+            </div>
+            <!-- Fracture -->
+            <div onclick="openFirstAidDetails('fracture')" class="first-aid-card cursor-pointer rounded-2xl border border-gray-100 bg-gray-50 p-4 text-center shadow-sm transition hover:bg-gray-100 dark:border-slate-800 dark:bg-slate-800/40">
+                <i class="ph ph-bone mb-2 text-4xl text-gray-600"></i>
+                <div class="text-sm font-bold dark:text-white">Fractures</div>
+                <p class="mt-1 text-[10px] text-gray-500">Splinting & immobilization</p>
+            </div>
+            <!-- Poisoning -->
+            <div onclick="openFirstAidDetails('poison')" class="first-aid-card cursor-pointer rounded-2xl border border-green-100 bg-green-50 p-4 text-center shadow-sm transition hover:bg-green-100 dark:border-green-950 dark:bg-green-950/20">
+                <i class="ph ph-skull mb-2 text-4xl text-green-600"></i>
+                <div class="text-sm font-bold dark:text-white">Poisoning</div>
+                <p class="mt-1 text-[10px] text-gray-500">Toxins & chemicals</p>
+            </div>
         </div>
-        <div class="mt-6 rounded-xl border border-yellow-200 bg-yellow-50 p-4 text-sm text-yellow-800 dark:border-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-200">
-            <strong>Disclaimer:</strong> This is an AI assistant. For life-threatening emergencies, always call <strong>108</strong> immediately.
+
+        <div class="mt-6 rounded-2xl border border-red-200 bg-red-50/50 p-4 text-sm text-red-800 dark:border-red-900/50 dark:bg-red-950/20 dark:text-red-300">
+            <strong>⚠️ Medical Disclaimer:</strong> These guidelines are for educational and emergency assistance only. For serious issues, always call ambulance immediately.
+            <div class="mt-3 flex gap-2">
+                <a href="tel:108" class="flex-1 rounded-xl bg-red-600 py-2.5 text-center text-xs font-bold text-white shadow hover:bg-red-700">📞 Call Ambulance (108)</a>
+                <button onclick="locateMe(); goBack();" class="flex-1 rounded-xl border border-red-500 bg-white py-2.5 text-center text-xs font-bold text-red-600 hover:bg-red-50 dark:bg-slate-800">📍 Find Hospital</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dynamic First Aid Details Modal -->
+    <div id="firstAidDetailsModal" class="animate-fade-in fixed inset-0 z-[120] hidden items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
+        <div class="relative flex max-h-[85vh] w-full max-w-lg flex-col rounded-3xl bg-white p-6 text-gray-900 shadow-2xl dark:bg-slate-900 dark:text-white">
+            <button onclick="closeFirstAidDetails()" class="absolute right-4 top-4 rounded-full bg-gray-100 p-2 text-xl hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700">✕</button>
+            
+            <div class="flex items-center gap-3 border-b pb-4 pr-10">
+                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-red-100 text-2xl text-red-600" id="firstAidModalIcon"><i class="ph ph-first-aid"></i></div>
+                <div>
+                    <h3 class="text-xl font-bold" id="firstAidModalTitle">First Aid Instructions</h3>
+                    <p class="text-xs text-gray-500">Step-by-step emergency instructions</p>
+                </div>
+            </div>
+
+            <div class="scrollbar flex-1 space-y-4 overflow-y-auto py-4 text-sm" id="firstAidModalContent">
+                <!-- Content injected dynamically -->
+            </div>
+
+            <div class="flex gap-3 border-t pt-4">
+                <button id="ttsButton" onclick="speakFirstAid()" class="btn-click flex flex-1 items-center justify-center gap-2 rounded-xl bg-blue-600 py-3 font-bold text-white shadow-md hover:bg-blue-700">
+                    <i class="ph ph-speaker-high"></i> <span>Play Audio Guide</span>
+                </button>
+                <button onclick="closeFirstAidDetails()" class="btn-click rounded-xl bg-gray-100 px-6 py-3 font-bold text-gray-700 hover:bg-gray-200 dark:bg-slate-800 dark:text-white">Close</button>
+            </div>
         </div>
     </div>
 
     <div id="peerPage" class="animate-fade-in hidden h-full flex-col">
-        <div class="mb-4 flex items-center gap-3">
-            <button onclick="goBack()" class="rounded-full bg-gray-100 p-2 text-xl hover:bg-gray-200 dark:bg-slate-800 dark:text-white"><i class="ph ph-arrow-left"></i></button>
-            <h2 class="text-xl font-bold dark:text-white">Community Forum</h2>
+        <div class="mb-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <button onclick="goBack()" class="rounded-full bg-gray-100 p-2 text-xl hover:bg-gray-200 dark:bg-slate-800 dark:text-white"><i class="ph ph-arrow-left"></i></button>
+                <h2 class="text-xl font-bold dark:text-white">Community Peer Forum</h2>
+            </div>
+            <button onclick="openCreatePostModal()" class="btn-click flex items-center gap-1 rounded-xl bg-indigo-600 px-3 py-1.5 text-xs font-bold text-white shadow"><i class="ph ph-plus"></i> Share Story</button>
         </div>
         
-        <div class="no-scrollbar mb-4 flex gap-2 overflow-x-auto">
-            <span class="whitespace-nowrap rounded-full bg-blue-600 px-3 py-1 text-xs font-bold text-white">All Topics</span>
-            <span class="whitespace-nowrap rounded-full bg-gray-100 px-3 py-1 text-xs font-bold text-gray-600 dark:bg-slate-800 dark:text-gray-300">Anxiety</span>
-            <span class="whitespace-nowrap rounded-full bg-gray-100 px-3 py-1 text-xs font-bold text-gray-600 dark:bg-slate-800 dark:text-gray-300">Exam Stress</span>
-            <span class="whitespace-nowrap rounded-full bg-gray-100 px-3 py-1 text-xs font-bold text-gray-600 dark:bg-slate-800 dark:text-gray-300">Depression</span>
+        <!-- Tag Filter Headers -->
+        <div class="no-scrollbar mb-4 flex gap-2 overflow-x-auto" id="forumTagFilters">
+            <button onclick="filterForum('All')" class="forum-tab-btn whitespace-nowrap rounded-full bg-indigo-600 px-4 py-1.5 text-xs font-bold text-white shadow-sm">All Topics</button>
+            <button onclick="filterForum('Anxiety')" class="forum-tab-btn whitespace-nowrap rounded-full bg-gray-100 px-4 py-1.5 text-xs font-bold text-gray-600 dark:bg-slate-800 dark:text-gray-300">Anxiety</button>
+            <button onclick="filterForum('Exam Stress')" class="forum-tab-btn whitespace-nowrap rounded-full bg-gray-100 px-4 py-1.5 text-xs font-bold text-gray-600 dark:bg-slate-800 dark:text-gray-300">Exam Stress</button>
+            <button onclick="filterForum('Motivation')" class="forum-tab-btn whitespace-nowrap rounded-full bg-gray-100 px-4 py-1.5 text-xs font-bold text-gray-600 dark:bg-slate-800 dark:text-gray-300">Motivation</button>
         </div>
 
-        <div class="space-y-4 pb-20">
-            <div class="rounded-2xl border bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800">
-                <div class="mb-2 flex items-center gap-3">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" class="h-8 w-8 rounded-full bg-gray-100">
-                    <div>
-                        <div class="text-xs font-bold text-gray-900 dark:text-white">Rahul K.</div>
-                        <div class="text-[10px] text-gray-500">2 hours ago • Exam Stress</div>
-                    </div>
-                </div>
-                <h3 class="mb-1 text-sm font-bold dark:text-gray-200">How to deal with finals pressure?</h3>
-                <p class="text-xs text-gray-600 dark:text-gray-400">I have 3 exams back to back next week and I can't sleep. Any tips?</p>
-                <div class="mt-3 flex gap-4 text-xs text-gray-400">
-                    <span class="flex items-center gap-1"><i class="ph ph-heart"></i> 12</span>
-                    <span class="flex items-center gap-1"><i class="ph ph-chat-circle"></i> 5</span>
-                </div>
-            </div>
+        <!-- Forum Posts List -->
+        <div class="no-scrollbar flex-1 space-y-4 overflow-y-auto pb-20" id="forumPostsContainer">
+            <!-- Posts Injected Dynamically -->
+        </div>
 
-            <div class="rounded-2xl border bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800">
-                <div class="mb-2 flex items-center gap-3">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="h-8 w-8 rounded-full bg-gray-100">
+        <!-- Post Creation Modal -->
+        <div id="createPostModal" class="animate-fade-in fixed inset-0 z-[120] hidden items-center justify-center bg-black/70 p-4 backdrop-blur-sm">
+            <div class="relative w-full max-w-md rounded-3xl bg-white p-6 text-gray-900 shadow-2xl dark:bg-slate-900 dark:text-white">
+                <button onclick="closeCreatePostModal()" class="absolute right-4 top-4 text-xl">✕</button>
+                <h3 class="mb-4 text-lg font-bold">Create New Post</h3>
+                <form onsubmit="handleCreatePost(event)" class="space-y-4">
                     <div>
-                        <div class="text-xs font-bold text-gray-900 dark:text-white">Sneha M.</div>
-                        <div class="text-[10px] text-gray-500">5 hours ago • Anxiety</div>
+                        <label class="mb-1 block text-xs font-bold uppercase text-gray-400">Title</label>
+                        <input type="text" id="postTitle" required class="w-full rounded-xl border border-gray-200 bg-white p-3 text-sm outline-none focus:ring-2 focus:ring-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
                     </div>
-                </div>
-                <h3 class="mb-1 text-sm font-bold dark:text-gray-200">Deep breathing actually works!</h3>
-                <p class="text-xs text-gray-600 dark:text-gray-400">Just tried the 4-7-8 technique from the Relax Audio section. Felt much better immediately.</p>
-                <div class="mt-3 flex gap-4 text-xs text-gray-400">
-                    <span class="flex items-center gap-1"><i class="ph ph-heart text-red-500"></i> 45</span>
-                    <span class="flex items-center gap-1"><i class="ph ph-chat-circle"></i> 8</span>
-                </div>
-            </div>
-
-             <div class="rounded-2xl border bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-800">
-                <div class="mb-2 flex items-center gap-3">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=John" class="h-8 w-8 rounded-full bg-gray-100">
                     <div>
-                        <div class="text-xs font-bold text-gray-900 dark:text-white">Amit S.</div>
-                        <div class="text-[10px] text-gray-500">1 day ago • Motivation</div>
+                        <label class="mb-1 block text-xs font-bold uppercase text-gray-400">Tag / Topic</label>
+                        <select id="postTag" class="w-full rounded-xl border border-gray-200 bg-white p-3 text-sm outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+                            <option value="Anxiety">Anxiety</option>
+                            <option value="Exam Stress">Exam Stress</option>
+                            <option value="Motivation">Motivation</option>
+                        </select>
                     </div>
-                </div>
-                <h3 class="mb-1 text-sm font-bold dark:text-gray-200">Small steps matter.</h3>
-                <p class="text-xs text-gray-600 dark:text-gray-400">Don't look at the whole mountain, just look at the next step. We got this!</p>
-                <div class="mt-3 flex gap-4 text-xs text-gray-400">
-                    <span class="flex items-center gap-1"><i class="ph ph-heart"></i> 89</span>
-                    <span class="flex items-center gap-1"><i class="ph ph-chat-circle"></i> 12</span>
-                </div>
+                    <div>
+                        <label class="mb-1 block text-xs font-bold uppercase text-gray-400">Share your experience</label>
+                        <textarea id="postContent" required class="w-full rounded-xl border border-gray-200 bg-white p-3 text-sm outline-none focus:ring-2 focus:ring-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-white" rows="4" placeholder="Write here anonymously..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-click w-full rounded-xl bg-indigo-600 py-3 font-bold text-white shadow-lg hover:bg-indigo-700">Publish Post</button>
+                </form>
             </div>
         </div>
-        <button class="fixed bottom-24 right-4 z-10 rounded-full bg-indigo-600 p-4 text-white shadow-lg hover:bg-indigo-700"><i class="ph ph-plus text-xl"></i></button>
+    </div>
+
+    <!-- Deep Guided Breathing Modal -->
+    <div id="breathingModal" class="animate-fade-in fixed inset-0 z-[120] hidden items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
+        <div class="relative flex w-full max-w-sm flex-col items-center justify-between rounded-3xl bg-white p-6 text-center text-gray-900 shadow-2xl dark:bg-slate-900 dark:text-white">
+            <button onclick="closeBreathingModal()" class="absolute right-4 top-4 text-xl">✕</button>
+            <div class="mb-4">
+                <h3 class="text-lg font-bold">Deep Breathing Grounding</h3>
+                <p class="text-xs text-gray-500">Focus your mind and sync your breath</p>
+            </div>
+            
+            <!-- Breathing Pacing Circle Container -->
+            <div class="relative my-8 flex h-48 w-48 items-center justify-center rounded-full bg-teal-500/10 dark:bg-teal-500/5">
+                <!-- Inner expanding circle -->
+                <div id="breathingCircle" class="flex h-24 w-24 items-center justify-center rounded-full bg-teal-500/40 transition-all duration-[4000ms] ease-in-out dark:bg-teal-500/30">
+                    <span id="breathingStateText" class="text-sm font-extrabold text-teal-800 dark:text-teal-200">Prepare</span>
+                </div>
+                <!-- Countdown timer inside circle -->
+                <div class="absolute bottom-3 text-xs font-bold text-teal-600" id="breathingTimerText">0s</div>
+            </div>
+
+            <!-- Instructions & Steps info -->
+            <div class="mb-6 space-y-1">
+                <h4 id="breathingInstructionLabel" class="text-sm font-bold">Press Start to begin 4-7-8 breathing</h4>
+                <p class="text-xs text-gray-400">Inhale (4s) • Hold (7s) • Exhale (8s)</p>
+            </div>
+
+            <div class="flex w-full gap-2">
+                <button id="breathingStartBtn" onclick="toggleBreathingSession()" class="btn-click flex-1 rounded-xl bg-teal-600 py-3 font-bold text-white shadow-lg hover:bg-teal-700">Start Session</button>
+                <button onclick="closeBreathingModal()" class="btn-click rounded-xl bg-gray-100 px-6 py-3 font-bold text-gray-700 hover:bg-gray-200 dark:bg-slate-800 dark:text-white">Cancel</button>
+            </div>
+        </div>
     </div>
 
     <div id="audioPage" class="animate-fade-in hidden h-full flex-col pb-24">
-        <div class="mb-4 flex items-center gap-3">
-            <button onclick="goBack()" class="rounded-full bg-gray-100 p-2 text-xl hover:bg-gray-200 dark:bg-slate-800 dark:text-white"><i class="ph ph-arrow-left"></i></button>
-            <h2 class="text-xl font-bold dark:text-white">Relaxation & Sleep</h2>
+        <div class="mb-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <button onclick="goBack()" class="rounded-full bg-gray-100 p-2 text-xl hover:bg-gray-200 dark:bg-slate-800 dark:text-white"><i class="ph ph-arrow-left"></i></button>
+                <h2 class="text-xl font-bold dark:text-white">Relaxation & Sleep</h2>
+            </div>
+            <button onclick="openBreathingModal()" class="btn-click flex items-center gap-1.5 rounded-xl bg-teal-600 px-3 py-1.5 text-xs font-bold text-white shadow"><i class="ph ph-wind"></i> Breathe Guide</button>
         </div>
 
-        <p class="mb-4 text-xs text-gray-500 dark:text-gray-400">Select a soundscape to focus, relax, or sleep.</p>
+        <!-- Deep Breathing Banner -->
+        <div class="relative mb-4 overflow-hidden rounded-3xl bg-gradient-to-r from-teal-500 to-cyan-600 p-5 text-white shadow-md">
+            <div class="absolute -bottom-4 -right-4 text-8xl opacity-10"><i class="ph ph-wind"></i></div>
+            <h3 class="mb-1 text-base font-bold">Interactive 4-7-8 Breathing Guide</h3>
+            <p class="mb-3 text-[11px] opacity-90">Reduce anxiety and stress instantly with guided breathing pacing.</p>
+            <button onclick="openBreathingModal()" class="btn-click rounded-xl bg-white px-4 py-2 text-xs font-extrabold text-teal-700 shadow transition hover:bg-teal-50">Start Session</button>
+        </div>
+
+        <p class="mb-4 text-xs font-bold text-gray-500 dark:text-gray-400">Audio Soundscapes:</p>
 
         <div class="grid grid-cols-2 gap-4 overflow-y-auto pb-20">
             
@@ -654,19 +1087,48 @@
   <div class="relative mx-auto flex max-h-[85vh] w-full max-w-2xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl dark:bg-slate-900">
     <div class="flex items-center justify-between border-b bg-gray-50 p-5 dark:border-slate-800 dark:bg-slate-900">
       <h2 class="flex items-center gap-2 text-xl font-bold dark:text-white">
-        <i class="ph ph-shield-check text-2xl text-blue-600"></i> Privacy Policy
+        <i class="ph ph-shield-check text-2xl text-blue-600"></i> Privacy Policy & Data Agreement
       </h2>
       <button onclick="closePrivacyModal()" class="text-2xl text-gray-500 transition hover:text-red-500">✕</button>
     </div>
     <div class="scrollbar space-y-6 overflow-y-auto p-6 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
-      <p class="text-xs italic">Last Updated: November 2025</p>
+      <p class="text-xs italic">Last Updated: June 2026</p>
+      
       <section>
-        <h3 class="mb-2 text-lg font-bold text-gray-900 dark:text-white">1. Introduction</h3>
-        <p>Welcome to <strong>Sahayak</strong>. We are committed to protecting your personal and mental health data.</p>
+        <h3 class="mb-2 text-base font-bold text-gray-900 dark:text-white">1. Introduction</h3>
+        <p>Welcome to <strong>Sahayak (The Protector)</strong>. We are fully committed to protecting your personal details, credentials, and sensitive health information in compliance with medical data privacy guidelines.</p>
       </section>
+
+      <section>
+        <h3 class="mb-2 text-base font-bold text-gray-900 dark:text-white">2. Information We Collect</h3>
+        <p class="mb-2">To provide tele-health counseling, symptom triage, and medical assistant features, we collect the following datasets:</p>
+        <ul class="list-disc space-y-1.5 pl-5 text-xs">
+          <li><strong>Authentication Details:</strong> Username, email address, password hashes (encrypted via `bcrypt` on registration), and role designations (Student, Counsellor, Admin).</li>
+          <li><strong>Mental & Physical Health Metrics:</strong> Answers submitted to the 9-point Patient Health Questionnaire (PHQ-9), screening scores, wellness trends, and active medicine names/schedules added via MedAids.</li>
+          <li><strong>Tele-Medicine & Booking Data:</strong> Appointment logs containing selected doctor (e.g. Dr. Sharma, Dr. Anjali), appointment date/time, selected consultation mode (video, audio, chat), and user-provided counseling reasons.</li>
+          <li><strong>Real-time Location:</strong> Geolocation coordinates captured only upon user initiation to identify nearby medical centers or map nearest clinic markers.</li>
+          <li><strong>AI Chatbot Conversations:</strong> Anonymized text conversations processed by our local Python AI chatbot backend for providing first aid or triage routing.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3 class="mb-2 text-base font-bold text-gray-900 dark:text-white">3. How We Use and Share Data</h3>
+        <ul class="list-disc space-y-1.5 pl-5 text-xs">
+          <li><strong>OTP Verification:</strong> Sending verification codes via Nodemailer and Twilio Service.</li>
+          <li><strong>Doctor Consultations:</strong> Permitting counselors to review wellness history and scheduled appointment entries.</li>
+          <li><strong>Emergency Response:</strong> Instantly dispatching location coordinates to emergency contacts or nearest ambulances upon triggering the SOS beacon.</li>
+          <li><strong>Strict Confidentiality:</strong> Your mental wellness history, chat records, and symptoms are never sold or shared with third-party advertisers.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3 class="mb-2 text-base font-bold text-gray-900 dark:text-white">4. Data Protection & Security Measures</h3>
+        <p class="text-xs">All network communications are processed securely. Authorization tokens are signed via JsonWebToken (JWT) on login, and medical screening scores are kept encrypted in storage. Users can delete their locally saved data by selecting the logout option.</p>
+      </section>
+
       <div class="mt-4 rounded-xl border border-blue-100 bg-blue-50 p-4 dark:border-blue-800 dark:bg-blue-900/20">
-        <p class="mb-1 font-bold text-blue-800 dark:text-blue-300">Contact Us</p>
-        <p class="text-xs">Email: <a href="mailto:privacy@sahayak.edu" class="underline">sumitkumarsharma0712@hmail.com</a></p>
+        <p class="mb-1 font-bold text-blue-800 dark:text-blue-300">Privacy Officer Contact</p>
+        <p class="text-xs">Email: <a href="mailto:sumitkumarsharma0712@gmail.com" class="underline">sumitkumarsharma0712@gmail.com</a></p>
       </div>
     </div>
     <div class="border-t bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
@@ -806,8 +1268,8 @@
         <p id="camStatus" class="absolute bottom-32 animate-pulse rounded-full bg-black/50 px-3 py-1 text-xs text-white">Camera Active...</p>
     </div>
     <div class="flex items-center justify-around bg-black p-6 pb-8">
-        <button onclick="alert('Photo Captured!')" class="flex flex-col items-center gap-1 text-white"><div class="flex h-16 w-16 items-center justify-center rounded-full border-4 border-white"><div class="h-14 w-14 rounded-full bg-white transition active:scale-90"></div></div><span class="text-xs">Photo</span></button>
-        <button onclick="alert('Video Recording Started...')" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white"><i class="ph ph-video-camera text-3xl"></i><span class="text-xs">Video</span></button>
+        <button onclick="Toastify({ text: 'Photo Captured!', backgroundColor: 'green' }).showToast()" class="flex flex-col items-center gap-1 text-white"><div class="flex h-16 w-16 items-center justify-center rounded-full border-4 border-white"><div class="h-14 w-14 rounded-full bg-white transition active:scale-90"></div></div><span class="text-xs">Photo</span></button>
+        <button onclick="Toastify({ text: 'Video Recording Started...', backgroundColor: 'red' }).showToast()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white"><i class="ph ph-video-camera text-3xl"></i><span class="text-xs">Video</span></button>
         <button onclick="toggleScanMode()" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white"><i class="ph ph-qr-code text-3xl"></i><span class="text-xs">Scan</span></button>
     </div>
 </div>
@@ -816,7 +1278,7 @@
   <div class="flex items-center justify-between bg-blue-600 p-4 text-white shadow-md">
      <div class="flex items-center gap-2">
        <div class="flex h-8 w-8 items-center justify-center rounded-full bg-white text-lg text-blue-600"><i class="ph ph-robot"></i></div>
-       <div><h3 class="font-bold">Sahayak AI</h3><p class="flex items-center gap-1 text-xs opacity-80"><span class="h-2 w-2 rounded-full bg-green-400"></span> <span data-translate="ai_status">Online</span></p></div>
+       <div><h3 class="font-bold">The Protector</h3><p class="flex items-center gap-1 text-xs opacity-80"><span class="h-2 w-2 rounded-full bg-green-400"></span> <span data-translate="ai_status">Online</span></p></div>
      </div>
      <button onclick="toggleChat()" class="text-2xl opacity-80 hover:opacity-100">✕</button>
   </div>
@@ -824,7 +1286,7 @@
      <div class="flex gap-3">
         <div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-lg">🤖</div>
         <div class="max-w-[85%] rounded-2xl rounded-tl-none bg-white p-4 shadow-sm dark:bg-slate-700 dark:text-white">
-           Namaste! I am Sahayak. I can help with anxiety, sleep, or symptoms.
+           Namaste! I am The Protector. I can help with anxiety, sleep, or symptoms.
            <div class="mt-3 flex flex-wrap gap-2">
               <button onclick="botQuickReply('stress')" class="rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs text-blue-700 dark:bg-slate-600 dark:text-blue-200">😫 Stressed</button>
               <button onclick="openAiFirstAid(); toggleChat()" class="rounded-full border border-red-100 bg-red-50 px-3 py-1 text-xs font-bold text-red-700">🚑 Panic</button>
@@ -856,11 +1318,59 @@
       <h3 class="text-2xl font-bold dark:text-white">PHQ-9 Screening</h3>
       <p class="text-sm text-gray-500">Over the last 2 weeks, how often have you been bothered by:</p>
     </div>
-    <form id="phqForm" class="scrollbar flex-1 space-y-4 overflow-y-auto p-2 pr-2"></form>
+        <form id="phqForm" class="scrollbar flex-1 space-y-4 overflow-y-auto p-2 pr-2"></form>
     <div class="mt-4 border-t pt-4 dark:border-slate-700">
       <button onclick="calculatePHQ()" class="btn-click w-full rounded-xl bg-blue-600 py-4 text-lg font-bold text-white shadow-md hover:bg-blue-700">Submit Assessment</button>
     </div>
   </div>
+</div>
+
+<!-- Custom Modals replacing native browser alerts/confirms/prompts -->
+<!-- Custom Logout Modal -->
+<div id="logoutModal" class="animate-fade-in fixed inset-0 z-[130] hidden flex-col items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+    <div class="w-full max-w-sm rounded-3xl bg-white p-6 text-center shadow-2xl dark:bg-slate-900">
+        <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-red-100 text-3xl text-red-600 dark:bg-red-950/20">
+            <i class="ph ph-sign-out"></i>
+        </div>
+        <h3 class="mb-2 text-xl font-bold dark:text-white">Confirm Logout</h3>
+        <p class="mb-6 text-sm text-gray-500 dark:text-gray-400">Are you sure you want to log out of your session?</p>
+        <div class="flex gap-3">
+            <button onclick="confirmLogout()" class="btn-click flex-1 rounded-xl bg-red-600 py-3 font-bold text-white shadow-lg hover:bg-red-700">Logout</button>
+            <button onclick="closeLogoutModal()" class="btn-click flex-1 rounded-xl bg-gray-100 py-3 font-bold text-gray-700 hover:bg-gray-200 dark:bg-slate-800 dark:text-white">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Add Medicine Modal -->
+<div id="addMedModal" class="animate-fade-in fixed inset-0 z-[120] hidden flex-col items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+    <div class="w-full max-w-sm rounded-3xl bg-white p-6 shadow-2xl dark:bg-slate-900">
+        <h3 class="mb-4 text-lg font-bold dark:text-white">Add Medicine Reminder</h3>
+        <div class="space-y-4">
+            <div>
+                <label class="text-xs font-bold uppercase text-gray-400">Medicine Name</label>
+                <input type="text" id="newMedName" placeholder="e.g. Paracetamol, Vitamin D" class="mt-1 w-full rounded-xl border border-gray-200 bg-white p-3 text-sm outline-none focus:ring-2 focus:ring-blue-500 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+            </div>
+            <div class="flex gap-3">
+                <button onclick="submitNewMed()" class="btn-click flex-1 rounded-xl bg-blue-600 py-3 font-bold text-white shadow-lg hover:bg-blue-700">Add</button>
+                <button onclick="closeAddMedModal()" class="btn-click flex-1 rounded-xl bg-gray-100 py-3 font-bold text-gray-700 hover:bg-gray-200 dark:bg-slate-800 dark:text-white">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom SOS Modal -->
+<div id="sosModal" class="animate-fade-in fixed inset-0 z-[130] hidden flex-col items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+    <div class="w-full max-w-sm rounded-3xl bg-white p-6 text-center shadow-2xl dark:bg-slate-900">
+        <div class="mx-auto mb-4 flex h-16 w-16 animate-pulse items-center justify-center rounded-full bg-red-100 text-3xl text-red-600 dark:bg-red-950/20">
+            <i class="ph ph-siren"></i>
+        </div>
+        <h3 class="mb-2 text-xl font-bold text-red-600 dark:text-red-400">Trigger SOS Alert?</h3>
+        <p class="mb-6 text-sm text-gray-500 dark:text-gray-400">This will immediately send your live location coordinates to emergency services and your caregivers.</p>
+        <div class="flex gap-3">
+            <button onclick="confirmSOS()" class="btn-click flex-1 rounded-xl bg-red-600 py-3 font-bold text-white shadow-lg hover:bg-red-700">Yes, Send SOS</button>
+            <button onclick="closeSOSModal()" class="btn-click flex-1 rounded-xl bg-gray-100 py-3 font-bold text-gray-700 hover:bg-gray-200 dark:bg-slate-800 dark:text-white">Cancel</button>
+        </div>
+    </div>
 </div>
 
 <div id="teleModal" class="animate-fade-in fixed inset-0 z-[60] hidden items-end justify-center bg-black/60 p-4 backdrop-blur-sm sm:items-center">
@@ -1055,29 +1565,82 @@
 
   // --- AUTH & OTP LOGIC (UPDATED) ---
   
-  // Step 1: Initial Login simulates sending OTP
+  function handleLoginRoleChange(role) {
+      const card = document.getElementById('loginCard');
+      const btn = document.getElementById('loginBtn');
+      const emailInput = document.getElementById('email');
+      const passInput = document.getElementById('password');
+      
+      // Clear specific style classes
+      card.className = "relative backdrop-blur-lg bg-white/85 dark:bg-slate-900/70 border border-white/20 rounded-3xl p-8 w-full max-w-md text-center transition-all duration-500 ring-2";
+      btn.className = "btn-click mt-4 flex w-full items-center justify-center gap-2 rounded-xl py-3.5 text-md font-bold text-white shadow-lg transition-all";
+      
+      if (role === 'student') {
+          card.classList.add('ring-blue-500/30', 'shadow-[0_20px_50px_rgba(37,99,235,0.2)]');
+          btn.classList.add('bg-gradient-to-r', 'from-blue-600', 'to-indigo-600', 'shadow-blue-500/20');
+          emailInput.value = "student@college.edu";
+          passInput.value = "password123";
+      } else if (role === 'employer') {
+          card.classList.add('ring-emerald-500/30', 'shadow-[0_20px_50px_rgba(16,185,129,0.2)]');
+          btn.classList.add('bg-gradient-to-r', 'from-emerald-600', 'to-teal-600', 'shadow-emerald-500/20');
+          emailInput.value = "employer@college.edu";
+          passInput.value = "password123";
+      } else if (role === 'counsellor') {
+          card.classList.add('ring-purple-500/30', 'shadow-[0_20px_50px_rgba(168,85,247,0.2)]');
+          btn.classList.add('bg-gradient-to-r', 'from-purple-600', 'to-pink-600', 'shadow-purple-500/20');
+          emailInput.value = "counsellor@college.edu";
+          passInput.value = "password123";
+      } else if (role === 'admin') {
+          card.classList.add('ring-red-500/30', 'shadow-[0_20px_50px_rgba(239,68,68,0.2)]');
+          btn.classList.add('bg-gradient-to-r', 'from-red-600', 'to-orange-600', 'shadow-red-500/20');
+          emailInput.value = "admin@college.edu";
+          passInput.value = "password123";
+      }
+  }
+
+  // Step 1: Initial Login validates credentials via backend
   function handleInitialLogin(e) {
       e.preventDefault();
       const email = document.getElementById('email').value;
+      const passWord = document.getElementById('password').value;
+      const role = document.getElementById('loginRole').value;
       const btn = document.getElementById('loginBtn');
       
-      btn.innerHTML = `<i class="ph ph-spinner animate-spin"></i> Sending OTP...`;
+      btn.innerHTML = `<i class="ph ph-spinner animate-spin"></i> Authenticating...`;
       btn.disabled = true;
 
-      // Update Role text in Sidebar for Realism
-      const role = document.getElementById('loginRole').value;
-      document.getElementById('userRoleDisplay').innerText = role.charAt(0).toUpperCase() + role.slice(1);
-
-      setTimeout(() => {
-        btn.innerHTML = `<span data-translate="btn_login">Login</span> <i class="ph ph-arrow-right"></i>`;
-        btn.disabled = false;
-        
-        // Show OTP Modal
-        document.getElementById('otpModal').classList.remove('hidden');
-        document.getElementById('otpModal').classList.add('flex');
-        startOtpTimer();
-        Toastify({ text: "OTP Sent: 1234", backgroundColor: "#2563eb", position: "center" }).showToast();
-      }, 1000);
+      fetch(`${API_URL}/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, passWord })
+      })
+      .then(res => {
+          if (!res.ok) {
+              throw new Error("Invalid email or password");
+          }
+          return res.json();
+      })
+      .then(data => {
+          // Save login response details temporarily
+          window.loginTempData = data;
+          
+          // Update role displayed in sidebar
+          document.getElementById('userRoleDisplay').innerText = data.role.charAt(0).toUpperCase() + data.role.slice(1);
+          
+          btn.innerHTML = `<span data-translate="btn_login">Login</span> <i class="ph ph-arrow-right"></i>`;
+          btn.disabled = false;
+          
+          // Show OTP Modal
+          document.getElementById('otpModal').classList.remove('hidden');
+          document.getElementById('otpModal').classList.add('flex');
+          startOtpTimer();
+          Toastify({ text: "Security OTP Sent (Demo: 1234)", backgroundColor: "#2563eb", position: "center" }).showToast();
+      })
+      .catch(err => {
+          btn.innerHTML = `<span data-translate="btn_login">Login</span> <i class="ph ph-arrow-right"></i>`;
+          btn.disabled = false;
+          Toastify({ text: err.message, backgroundColor: "red", position: "center" }).showToast();
+      });
   }
 
   // OTP Timer Logic
@@ -1107,24 +1670,78 @@
 
   // Step 2: Verify OTP and Login
   function verifyLoginOTP() {
-      // For demo, accept any 4 digits
+      const token = window.loginTempData ? window.loginTempData.token : 'z';
+      const role = window.loginTempData ? window.loginTempData.role : document.getElementById('loginRole').value;
+      const email = document.getElementById('email').value;
+      
       document.getElementById('otpModal').classList.add('hidden');
       document.getElementById('loginPage').classList.add('hidden');
       document.getElementById('mainApp').classList.remove('hidden');
-      const email = document.getElementById('email').value;
+      
       localStorage.setItem('userEmail', email);
+      localStorage.setItem('userRole', role);
+      localStorage.setItem('userToken', token);
+      
       Toastify({ text: "Login Verified Successfully", backgroundColor: "green", position: "center" }).showToast();
-      initMap(); renderChart();
+      
+      loadDashboard(role);
+      initMap(); 
+      renderChart();
+  }
+
+  function loadDashboard(role) {
+      document.getElementById('studentDashboard').classList.add('hidden');
+      document.getElementById('counsellorDashboard').classList.add('hidden');
+      document.getElementById('adminDashboard').classList.add('hidden');
+      document.getElementById('employerDashboard').classList.add('hidden');
+
+      if (role === 'student' || role === 'patient') {
+          document.getElementById('studentDashboard').classList.remove('hidden');
+      } else if (role === 'counsellor' || role === 'doctor') {
+          document.getElementById('counsellorDashboard').classList.remove('hidden');
+          renderCounsellorPortal();
+      } else if (role === 'admin') {
+          document.getElementById('adminDashboard').classList.remove('hidden');
+          renderAdminPortal();
+      } else if (role === 'employer') {
+          document.getElementById('employerDashboard').classList.remove('hidden');
+          renderEmployerPortal();
+      }
   }
 
   function handleBackendSignup(e) {
-    e.preventDefault();
-    const btn = document.getElementById('signupBtn');
-    btn.innerHTML = `<i class="ph ph-spinner animate-spin"></i> Creating...`;
-    setTimeout(() => {
-        Toastify({ text: "Account Created! Please Login.", backgroundColor: "green" }).showToast();
-        showPage('loginPage');
-    }, 1000);
+      e.preventDefault();
+      const userName = document.getElementById('signupName').value;
+      const email = document.getElementById('signupEmail').value;
+      const passWord = document.getElementById('signupPass').value;
+      const role = document.getElementById('signupRole').value;
+      const btn = document.getElementById('signupBtn');
+      
+      btn.innerHTML = `<i class="ph ph-spinner animate-spin"></i> Creating...`;
+      btn.disabled = true;
+      
+      fetch(`${API_URL}/signup`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userName, email, passWord, role })
+      })
+      .then(res => {
+          if (!res.ok) {
+              return res.text().then(text => { throw new Error(text) });
+          }
+          return res.text();
+      })
+      .then(data => {
+          btn.innerHTML = `Register`;
+          btn.disabled = false;
+          Toastify({ text: "Account Created! Please Login.", backgroundColor: "green" }).showToast();
+          showPage('loginPage');
+      })
+      .catch(err => {
+          btn.innerHTML = `Register`;
+          btn.disabled = false;
+          Toastify({ text: err.message || "Failed to register", backgroundColor: "red" }).showToast();
+      });
   }
 
   // Updated Forgot Password: Moves to Reset Page
@@ -1146,10 +1763,16 @@
   }
 
   function logout() { 
-    if(confirm("Log out?")) {
+      document.getElementById('logoutModal').classList.remove('hidden');
+      document.getElementById('logoutModal').classList.add('flex');
+  }
+  function closeLogoutModal() {
+      document.getElementById('logoutModal').classList.add('hidden');
+      document.getElementById('logoutModal').classList.remove('flex');
+  }
+  function confirmLogout() {
       localStorage.removeItem('userEmail');
       location.reload();
-    }
   }
   function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
@@ -1200,166 +1823,317 @@
 
 // 1. SOS Function
 function sendSOS() {
-    if(confirm("Are you sure? This will send your live location to your emergency contacts.")) {
-        // Simulate sending alert
-        const btn = document.querySelector('button[onclick="sendSOS()"]');
-        const originalText = btn.innerHTML;
+    document.getElementById('sosModal').classList.remove('hidden');
+    document.getElementById('sosModal').classList.add('flex');
+}
+function closeSOSModal() {
+    document.getElementById('sosModal').classList.add('hidden');
+    document.getElementById('sosModal').classList.remove('flex');
+}
+function confirmSOS() {
+    closeSOSModal();
+    const btn = document.querySelector('button[onclick="sendSOS()"]');
+    const originalText = btn.innerHTML;
+    
+    btn.innerHTML = `<i class="ph ph-spinner animate-spin text-2xl"></i> Sending Alert...`;
+    btn.classList.remove('bg-red-600', 'animate-pulse');
+    btn.classList.add('bg-gray-600');
+
+    setTimeout(() => {
+        // Success State
+        btn.innerHTML = `<i class="ph ph-check-circle text-2xl"></i> Alert Sent!`;
+        btn.classList.replace('bg-gray-600', 'bg-green-600');
         
-        btn.innerHTML = `<i class="ph ph-spinner animate-spin text-2xl"></i> Sending Alert...`;
-        btn.classList.remove('bg-red-600', 'animate-pulse');
-        btn.classList.add('bg-gray-600');
+        Toastify({
+            text: "SOS Sent! Contacts notified with Location.",
+            duration: 5000,
+            backgroundColor: "red",
+            gravity: "top", 
+            position: "center"
+        }).showToast();
 
+        // Reset button after 3 seconds
         setTimeout(() => {
-            // Success State
-            btn.innerHTML = `<i class="ph ph-check-circle text-2xl"></i> Alert Sent!`;
-            btn.classList.replace('bg-gray-600', 'bg-green-600');
-            
-            Toastify({
-                text: "SOS Sent! Contacts notified with Location.",
-                duration: 5000,
-                backgroundColor: "red",
-                gravity: "top", 
-                position: "center"
-            }).showToast();
-
-            // Reset button after 3 seconds
-            setTimeout(() => {
-                btn.innerHTML = originalText;
-                btn.classList.replace('bg-green-600', 'bg-red-600');
-                btn.classList.add('animate-pulse');
-            }, 3000);
-        }, 1500);
-    }
+            btn.innerHTML = originalText;
+            btn.classList.replace('bg-green-600', 'bg-red-600');
+            btn.classList.add('animate-pulse');
+        }, 3000);
+    }, 1500);
 }
 
 // 2. Locate Nearby Hospitals (Map Logic)
-let mapInstance = null;
 
-function locateMe() {
-    const mapContainer = document.querySelector('.map-container');
-    const mapDiv = document.getElementById('map');
-    
-    // Scroll to map
-    mapContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-    if (!navigator.geolocation) {
-        alert("Geolocation is not supported by your browser");
-        return;
+    function openPhqModal(){
+        // Build PHQ-9 form dynamically when opening
+        const questions = [
+            "Little interest or pleasure in doing things",
+            "Feeling down, depressed, or hopeless",
+            "Trouble falling or staying asleep, or sleeping too much",
+            "Feeling tired or having little energy",
+            "Poor appetite or overeating",
+            "Feeling bad about yourself — or that you are a failure or have let yourself or your family down",
+            "Trouble concentrating on things, such as reading the newspaper or watching television",
+            "Moving or speaking so slowly that other people could have noticed? Or the opposite — being so fidgety or restless that you have been moving a lot more than usual",
+            "Thoughts that you would be better off dead or of hurting yourself in some way"
+        ];
+        const form = document.getElementById('phqForm');
+        form.innerHTML = '';
+        questions.forEach((q, idx) => {
+            const qDiv = document.createElement('div');
+            qDiv.className = 'space-y-2';
+            qDiv.innerHTML = `
+                <div class="text-sm font-bold dark:text-white">${idx+1}. ${q}</div>
+                <div class="flex gap-2 text-xs"> 
+                    <label class="flex-1 rounded bg-gray-50 p-2 text-center"><input type="radio" name="q${idx}" value="0" checked> Not at all (0)</label>
+                    <label class="flex-1 rounded bg-gray-50 p-2 text-center"><input type="radio" name="q${idx}" value="1"> Several days (1)</label>
+                    <label class="flex-1 rounded bg-gray-50 p-2 text-center"><input type="radio" name="q${idx}" value="2"> More than half the days (2)</label>
+                    <label class="flex-1 rounded bg-gray-50 p-2 text-center"><input type="radio" name="q${idx}" value="3"> Nearly every day (3)</label>
+                </div>
+            `;
+            form.appendChild(qDiv);
+        });
+        document.getElementById('phqModal').classList.remove('hidden');
+        document.getElementById('phqModal').scrollTop = 0;
     }
 
-    Toastify({ text: "Locating you...", backgroundColor: "#2563eb" }).showToast();
-
-    navigator.geolocation.getCurrentPosition((position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-
-        // Initialize Map if not already created
-        if (mapInstance === null) {
-            mapInstance = L.map('map').setView([lat, lng], 13);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap'
-            }).addTo(mapInstance);
-        } else {
-            mapInstance.setView([lat, lng], 13);
-            // Clear existing markers to avoid duplicates
-            mapInstance.eachLayer((layer) => {
-                if (layer instanceof L.Marker) { mapInstance.removeLayer(layer); }
-            });
+    function calculatePHQ(){
+        const form = document.getElementById('phqForm');
+        let score = 0;
+        for(let i=0;i<9;i++){
+            const val = form.querySelector(`input[name=q${i}]:checked`);
+            if(val) score += parseInt(val.value,10);
         }
+        // Severity mapping
+        let severity = '';
+        let advice = '';
+        if(score<=4){ severity='None-minimal'; advice='No action needed. Monitor symptoms.'; }
+        else if(score<=9){ severity='Mild'; advice='Watchful waiting; consider lifestyle changes and follow-up.'; }
+        else if(score<=14){ severity='Moderate'; advice='Consider counseling, psychotherapy, or follow-up with a provider.'; }
+        else if(score<=19){ severity='Moderately severe'; advice='Active treatment with psychotherapy and/or medication recommended.'; }
+        else { severity='Severe'; advice='Immediate evaluation by mental health professional recommended; consider urgent referral.'; }
 
-        // Add User Marker (Blue)
-        const userIcon = L.divIcon({
-            className: 'custom-div-icon',
-            html: `<div style='background-color:#2563eb; width:15px; height:15px; border-radius:50%; border:2px solid white; box-shadow:0 0 10px #2563eb;'></div>`,
-            iconSize: [15, 15],
-            iconAnchor: [7, 7]
-        });
+        // Show result in modal and update dashboard
+        document.getElementById('sideScore').innerText = `${score} (${severity})`;
+        const expEl = document.getElementById('expScore');
+        if(expEl) expEl.innerText = `${score} / 27`;
 
-        L.marker([lat, lng], {icon: userIcon}).addTo(mapInstance)
-            .bindPopup("<b>You are here</b>").openPopup();
+                // Detailed feedback and send to backend for follow-up if configured
+                const detail = `PHQ-9 Score: ${score} / 27\nSeverity: ${severity}\n\n${advice}`;
+                // send to backend (will trigger email/SMS if backend env configured)
+                const userEmail = (document.getElementById('email') && document.getElementById('email').value) || '';
+                fetch('/phq-result', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: userEmail, score, severity, details: detail })
+                }).then(r => r.json().catch(()=>{})).then(() => {
+                    // show local feedback
+                    Toastify({
+                        text: `Screening Saved!\n${detail}`,
+                        duration: 6000,
+                        gravity: "top",
+                        position: "center",
+                        backgroundColor: score > 10 ? "red" : "green",
+                        className: "text-center font-bold"
+                    }).showToast();
+                    document.getElementById('phqModal').classList.add('hidden');
+                }).catch(err => {
+                    console.error('PHQ submit failed', err);
+                    Toastify({
+                        text: `Screening Saved (Local Mode)!\n${detail}`,
+                        duration: 6000,
+                        gravity: "top",
+                        position: "center",
+                        backgroundColor: score > 10 ? "red" : "green",
+                        className: "text-center font-bold"
+                    }).showToast();
+                    document.getElementById('phqModal').classList.add('hidden');
+                });
+    }
 
-        // Simulate Nearby Hospitals (Randomly around user for demo)
-        // In a real app, you would fetch this from Google Places API
+    // 2. Locate Nearby Hospitals (Google Maps + Places). If API key not set or Maps fails, fallback to simulated markers.
+    let mapInstance = null;
+    let gmapMarkers = [];
+    function locateMe() {
+        const mapContainer = document.querySelector('.map-container');
+        const mapDiv = document.getElementById('map');
+        mapContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        if (!navigator.geolocation) { Toastify({ text: "Geolocation is not supported by your browser", backgroundColor: "red" }).showToast(); return; }
+        Toastify({ text: "Locating you...", backgroundColor: "#2563eb" }).showToast();
+
+        navigator.geolocation.getCurrentPosition(async (position) => {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+
+            // If google maps available, use it
+            if (window.google && google.maps) {
+                const center = { lat, lng };
+                if (!mapInstance) {
+                    mapInstance = new google.maps.Map(mapDiv, { center, zoom: 14 });
+                } else {
+                    mapInstance.setCenter(center);
+                }
+
+                // clear markers
+                gmapMarkers.forEach(m => m.setMap(null)); gmapMarkers = [];
+
+                // user marker
+                gmapMarkers.push(new google.maps.Marker({ position: center, map: mapInstance, title: 'You are here' }));
+
+                // Use Places Nearby Search to find hospitals
+                try{
+                    const service = new google.maps.places.PlacesService(mapInstance);
+                    const req = { location: center, radius: 3000, type: ['hospital', 'health'] };
+                    service.nearbySearch(req, (results, status) => {
+                        if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+                            results.slice(0,6).forEach(place => {
+                                const marker = new google.maps.Marker({ position: place.geometry.location, map: mapInstance, title: place.name });
+                                const info = new google.maps.InfoWindow({ content: `<div style='min-width:180px'><strong>${place.name}</strong><br>${place.vicinity || ''}<br><a href='https://www.google.com/maps/dir/?api=1&destination=${place.geometry.location.lat()},${place.geometry.location.lng()}' target='_blank'>Directions</a></div>` });
+                                marker.addListener('click', ()=> info.open(mapInstance, marker));
+                                gmapMarkers.push(marker);
+                            });
+                            Toastify({ text: `${Math.min(results.length,6)} hospitals found nearby`, backgroundColor: 'green' }).showToast();
+                        } else {
+                            // fallback to simulated
+                            simulateHospitals(lat, lng);
+                        }
+                    });
+                }catch(e){ console.error(e); simulateHospitals(lat,lng); }
+
+            } else {
+                // Google Maps not available (no API key): fallback
+                simulateHospitals(lat, lng);
+            }
+
+        }, (error) => { Toastify({ text: "Unable to retrieve your location. Please check GPS settings.", backgroundColor: "red" }).showToast(); console.error(error); });
+    }
+
+    function simulateHospitals(lat, lng){
+        // Simple fallback -- places simulated around user
+        if (!mapInstance) {
+            // build a simple map using Google Maps if available, else just place static markers visually
+            if (window.google && google.maps) {
+                mapInstance = new google.maps.Map(document.getElementById('map'), { center: {lat,lng}, zoom: 13 });
+            } else {
+                document.getElementById('map').innerHTML = '<div class="p-6 text-center">Map unavailable (set Google Maps API key in index.html). Showing nearby suggestions below.</div>';
+            }
+        }
         const hospitals = [
-            { name: "City Care Hospital", latOffset: 0.002, lngOffset: 0.003 },
-            { name: "Mental Wellness Clinic", latOffset: -0.002, lngOffset: -0.001 },
-            { name: "Emergency Trauma Center", latOffset: 0.001, lngOffset: -0.004 },
-            { name: "Apollo Pharmacy", latOffset: -0.003, lngOffset: 0.002 }
+            { name: 'City Care Hospital', lat: lat+0.002, lng: lng+0.003 },
+            { name: 'Mental Wellness Clinic', lat: lat-0.002, lng: lng-0.001 },
+            { name: 'Emergency Trauma Center', lat: lat+0.001, lng: lng-0.004 },
+            { name: 'Apollo Pharmacy', lat: lat-0.003, lng: lng+0.002 }
         ];
-
-        hospitals.forEach(h => {
-            L.marker([lat + h.latOffset, lng + h.lngOffset]).addTo(mapInstance)
-             .bindPopup(`
-                <div class="text-center">
-                    <strong class="text-red-600">${h.name}</strong><br>
-                    <span class="text-xs text-gray-500">1.2 km away</span><br>
-                    <a href="https://www.google.com/maps/dir/?api=1&destination=${lat + h.latOffset},${lng + h.lngOffset}" target="_blank" class="mt-1 inline-block rounded bg-blue-600 px-2 py-1 text-[10px] text-white no-underline">Get Directions</a>
-                </div>
-             `);
-        });
-
-        Toastify({ text: "4 Hospitals Found Nearby", backgroundColor: "green" }).showToast();
-
-    }, (error) => {
-        alert("Unable to retrieve your location. Please check GPS settings.");
-        console.error(error);
-    });
-};
-  function addMedPrompt() { const n = prompt("Medicine Name:"); if(n) document.getElementById('medList').innerHTML += `<div class="mb-2 flex justify-between rounded-xl bg-blue-50 p-3 dark:bg-slate-800"><span class="font-bold dark:text-white">${n}</span><input type="checkbox" class="h-5 w-5"></div>`; }
+        if (window.google && google.maps) {
+            hospitals.forEach(h => {
+                const m = new google.maps.Marker({ position: {lat: h.lat, lng: h.lng}, map: mapInstance, title: h.name });
+                const info = new google.maps.InfoWindow({ content: `<strong>${h.name}</strong><br><a href='https://www.google.com/maps/dir/?api=1&destination=${h.lat},${h.lng}' target='_blank'>Directions</a>` });
+                m.addListener('click', ()=> info.open(mapInstance,m));
+                gmapMarkers.push(m);
+            });
+            Toastify({ text: `${hospitals.length} Hospitals (simulated) shown`, backgroundColor: 'orange' }).showToast();
+        } else {
+            // show a textual fallback list under the map
+            const listHtml = hospitals.map(h=> `<div class="mb-2 rounded bg-white p-2 shadow"><strong>${h.name}</strong><div class="text-xs text-gray-500">Approx location</div><a href='https://www.google.com/maps/dir/?api=1&destination=${h.lat},${h.lng}' target='_blank' class='text-blue-600'>Directions</a></div>`).join('');
+            const container = document.getElementById('map');
+            container.innerHTML = `<div class='p-4'>${listHtml}</div>`;
+        }
+    }
+  let activeMedPresetName = null;
+  function addMedPrompt(presetName) {
+      if (presetName) {
+          addMedToList(presetName);
+      } else {
+          activeMedPresetName = null;
+          document.getElementById('newMedName').value = '';
+          document.getElementById('addMedModal').classList.remove('hidden');
+          document.getElementById('addMedModal').classList.add('flex');
+          document.getElementById('newMedName').focus();
+      }
+  }
+  function closeAddMedModal() {
+      document.getElementById('addMedModal').classList.add('hidden');
+      document.getElementById('addMedModal').classList.remove('flex');
+  }
+  function submitNewMed() {
+      const name = document.getElementById('newMedName').value.trim();
+      if (name) {
+          addMedToList(name);
+          closeAddMedModal();
+      } else {
+          Toastify({ text: "Please enter a medicine name", backgroundColor: "orange" }).showToast();
+      }
+  }
+  function addMedToList(name) {
+      const medList = document.getElementById('medList');
+      if (medList.querySelector('[data-translate="no_meds"]')) {
+          medList.innerHTML = '';
+      }
+      medList.innerHTML += `
+          <div class="animate-slide-up mb-2 flex justify-between rounded-xl bg-blue-50 p-3 dark:bg-slate-800">
+              <span class="font-bold dark:text-white">${name}</span>
+              <input type="checkbox" class="h-5 w-5">
+          </div>
+      `;
+      Toastify({ text: `Reminder added for ${name}`, backgroundColor: "green" }).showToast();
+  }
   function toggleCaregiver() { const v = document.getElementById('caregiverToggle').checked; Toastify({ text: v ? "Caregiver Mode: ON" : "Caregiver Mode: OFF", backgroundColor: v?"green":"gray" }).showToast(); }
-  function downloadReport() { alert("Downloading Encrypted PDF..."); }
+  function downloadReport() { Toastify({ text: "Downloading Encrypted PDF Report...", backgroundColor: "blue", position: "center" }).showToast(); }
 
   // ==========================================
   //  ADVANCED CHATBOT LOGIC (COMMAND PARSER)
+  // ==========================================
+  // ==========================================
+  //  ADVANCED CHATBOT LOGIC (PYTHON BACKEND CONNECTED)
   // ==========================================
   function toggleChat() { 
       document.getElementById('chatModal').classList.toggle('hidden'); 
       document.getElementById('chatModal').classList.toggle('flex'); 
   }
 
-  // Knowledge Base: Keywords map to Actions
-  const knowledgeBase = [
-    { 
-        keys: ['book', 'appointment', 'doctor', 'schedule', 'meet'], 
-        reply: "Opening the appointment scheduler for you now...", 
-        action: () => openTeleModal() 
-    },
-    { 
-        keys: ['symptom', 'pain', 'sick', 'ill', 'check', 'diagnosis', 'fever', 'headache'], 
-        reply: "I'll open the AI Symptom Checker. Please describe what you are feeling there.", 
-        action: () => { toggleChat(); openSymptomChecker(); } 
-    },
-    { 
-        keys: ['music', 'song', 'audio', 'relax', 'sleep', 'sound', 'noise'], 
-        reply: "Opening the Relaxation Audio library. Try the 'Rain Sounds' for sleep.", 
-        action: () => { toggleChat(); openAudioPage(); } 
-    },
-    { 
-        keys: ['panic', 'die', 'kill', 'suicide', 'emergency', 'help', 'scared', 'hurt'], 
-        reply: "Please stay calm. I am opening the Emergency Section immediately.", 
-        action: () => { toggleChat(); goBack(); document.getElementById('dashboardView').scrollIntoView(); Toastify({text: "Emergency Mode Activated", backgroundColor: "red", duration: 5000}).showToast(); } 
-    },
-    { 
-        keys: ['community', 'peer', 'forum', 'chat', 'friends', 'group'], 
-        reply: "Connecting you to the Peer Support Forum...", 
-        action: () => { toggleChat(); openPeerPage(); } 
-    },
-    { 
-        keys: ['profile', 'name', 'email', 'edit', 'account'], 
-        reply: "Taking you to profile settings...", 
-        action: () => { toggleChat(); openEditProfile(); } 
-    },
-    { 
-        keys: ['stress', 'anxiety', 'sad', 'depressed', 'lonely'], 
-        reply: "I hear you. You are not alone. Would you like to try some 'Deep Breathing' exercises or 'Chat with a Peer'?", 
-        action: null // Just conversation
-    },
-    {
-        keys: ['hospital', 'location', 'near', 'map'],
-        reply: "Locating nearby hospitals on the map...",
-        action: () => { toggleChat(); goBack(); document.getElementById('map').scrollIntoView(); }
-    }
-  ];
+  const CHATBOT_API_URL = 'http://localhost:5005/chat';
+
+  function selectDoctorByName(docName) {
+      if (!docName) return;
+      const cards = document.querySelectorAll('.doc-card');
+      for (let card of cards) {
+          const h5 = card.querySelector('h5');
+          if (h5 && h5.innerText.toLowerCase().includes(docName.toLowerCase())) {
+              selectDoctor(card, docName);
+              break;
+          }
+      }
+  }
+
+  function handleChatAction(action, data) {
+      if (!action) return;
+      
+      setTimeout(() => {
+          if (action === 'trigger_sos') {
+              toggleChat();
+              sendSOS();
+          } else if (action === 'open_booking') {
+              openTeleModal();
+              if (data && data.doctor) {
+                  selectDoctorByName(data.doctor);
+              }
+          } else if (action === 'open_symptom_checker') {
+              toggleChat();
+              openSymptomChecker();
+          } else if (action === 'open_first_aid') {
+              toggleChat();
+              openAiFirstAid();
+          } else if (action === 'open_audio') {
+              toggleChat();
+              openAudioPage();
+          } else if (action === 'add_reminder') {
+              const medName = data ? data.medicine : "";
+              addMedPrompt(medName);
+          } else if (action === 'medication_info') {
+              // Just show info inside the chat
+          }
+      }, 1500);
+  }
 
   function sendUserMessage(msgOverride) {
       const inputEl = document.getElementById('chatInput');
@@ -1369,46 +2143,60 @@ function locateMe() {
       const chatArea = document.getElementById('chatArea');
       
       // 1. Add User Message
-      chatArea.innerHTML += `<div class="animate-slide-up mb-2 flex justify-end"><div class="chat-user p-3 px-4 text-sm shadow-sm">${msg}</div></div>`;
-      inputEl.value = "";
+      chatArea.innerHTML += `<div class="animate-slide-up mb-2 flex justify-end"><div class="chat-user max-w-[85%] rounded-2xl rounded-tr-none bg-blue-600 p-3 px-4 text-sm text-white shadow-sm">${msg}</div></div>`;
+      if (!msgOverride) {
+          inputEl.value = "";
+      }
       chatArea.scrollTop = chatArea.scrollHeight;
 
       // 2. Show Typing Indicator
       const typeId = 'typing-' + Date.now();
-      chatArea.innerHTML += `<div id="${typeId}" class="mb-2 flex gap-2"><div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100">🤖</div><div class="chat-bot p-3 px-4 shadow-sm"><div class="flex gap-1"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div></div></div>`;
+      chatArea.innerHTML += `<div id="${typeId}" class="mb-2 flex gap-2"><div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100">🤖</div><div class="chat-bot rounded-2xl rounded-tl-none bg-white p-3 px-4 shadow-sm dark:bg-slate-700"><div class="flex gap-1"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div></div></div>`;
       chatArea.scrollTop = chatArea.scrollHeight;
 
-      // 3. Process Logic
-      setTimeout(() => {
-          document.getElementById(typeId).remove();
-          
-          let found = false;
-          let replyText = "I can help with that. Could you be more specific? Try saying 'Book doctor' or 'I feel sick'.";
-          let actionToRun = null;
+      // 3. Query Python Chatbot Backend API
+      fetch(CHATBOT_API_URL, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ message: msg })
+      })
+      .then(response => response.json())
+      .then(data => {
+          // Remove typing indicator
+          const typeIndicator = document.getElementById(typeId);
+          if (typeIndicator) typeIndicator.remove();
 
-          const lowerMsg = msg.toLowerCase();
+          const replyText = data.reply || "I encountered an error processing your query.";
+          const action = data.action;
+          const actionData = data.data;
 
-          // Check Knowledge Base
-          for (let item of knowledgeBase) {
-              if (item.keys.some(key => lowerMsg.includes(key))) {
-                  replyText = item.reply;
-                  actionToRun = item.action;
-                  found = true;
-                  break; 
-              }
-          }
+          // Format bot reply (support newlines and markdown-like symbols)
+          const formattedReply = replyText.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 
           // 4. Add Bot Reply
-          chatArea.innerHTML += `<div class="animate-fade-in mb-2 flex gap-2"><div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100">🤖</div><div class="chat-bot p-3 px-4 text-sm leading-relaxed shadow-sm">${replyText}</div></div>`;
+          chatArea.innerHTML += `<div class="animate-fade-in mb-2 flex gap-2"><div class="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100">🤖</div><div class="chat-bot rounded-2xl rounded-tl-none bg-white p-3 px-4 text-sm leading-relaxed shadow-sm dark:bg-slate-700 dark:text-white">${formattedReply}</div></div>`;
           chatArea.scrollTop = chatArea.scrollHeight;
 
-          // 5. Execute Action if any (after a short delay for user to read)
-          if (actionToRun) {
-              setTimeout(actionToRun, 1500);
-          }
+          // 5. Handle Action
+          handleChatAction(action, actionData);
+      })
+      .catch(error => {
+          console.error("Chatbot API error:", error);
+          const typeIndicator = document.getElementById(typeId);
+          if (typeIndicator) typeIndicator.remove();
 
-      }, 1200); // 1.2s simulated thinking time
-  };
+          chatArea.innerHTML += `<div class="animate-fade-in mb-2 flex gap-2"><div class="flex h-8 w-8 items-center justify-center rounded-full bg-red-100 text-red-600">⚠️</div><div class="chat-bot rounded-2xl rounded-tl-none bg-red-50 p-3 px-4 text-sm leading-relaxed text-red-700 shadow-sm">Failed to connect to active AI chatbot backend. Please ensure the Python server is running.</div></div>`;
+          chatArea.scrollTop = chatArea.scrollHeight;
+      });
+  }
+
+  // Quick reply helper
+  function botQuickReply(topic) {
+      sendUserMessage(topic);
+  }
+
   // --- NEW FEATURES LOGIC ---
   function openVideoCall() {
       document.getElementById('cameraModal').classList.remove('hidden'); 
@@ -1491,6 +2279,955 @@ function handleAppointment(e) {
       Toastify({text: `Score: ${score} - ${sev}`, backgroundColor: score>10?"red":"green", duration:4000}).showToast(); 
   }
   function renderChart() { new Chart(document.getElementById('chartAnalytics'), { type: 'line', data: { labels: ['W1','W2','W3'], datasets: [{ label: 'Trend', data: [5,8,6], borderColor: 'blue' }] } }); }
+
+  // ==========================================
+  //  ADVANCED FIRST AID ASSISTANT LOGIC
+  // ==========================================
+  const firstAidData = {
+      bleeding: {
+          title: "Bleeding & Cuts Guide",
+          icon: "ph-bandaids",
+          color: "text-red-500",
+          steps: [
+              "**Apply Direct Pressure:** Use a clean cloth or bandage and press firmly on the wound.",
+              "**Elevate:** Raise the injured limb above heart level if possible.",
+              "**Clean Gently:** Wash with mild soap and water once bleeding stops.",
+              "**Apply Antiseptic:** Put a thin layer of antibacterial ointment.",
+              "**Cover:** Wrap with a sterile adhesive bandage or gauze."
+          ],
+          dos: [
+              "Keep the wound clean and dry.",
+              "Elevate to reduce throbbing.",
+              "Seek help if bleeding doesn't stop in 10 minutes."
+          ],
+          donts: [
+              "Do not pull out deeply embedded objects yourself.",
+              "Do not touch the wound with dirty hands."
+          ]
+      },
+      burn: {
+          title: "Burns First Aid Guide",
+          icon: "ph-fire",
+          color: "text-orange-500",
+          steps: [
+              "**Cool the Burn:** Run cool water over it for 10-15 minutes.",
+              "**Protect:** Remove rings or clothing gently before swelling starts.",
+              "**Moisturize:** Apply pure aloe vera gel for minor burns.",
+              "**Bandage:** Cover loosely with a sterile, non-stick bandage.",
+              "**Relieve Pain:** Use OTC ibuprofen or paracetamol if needed."
+          ],
+          dos: [
+              "Use cool running water immediately.",
+              "Cover the burn to keep air off and reduce pain."
+          ],
+          donts: [
+              "Do not apply ice, butter, oil, or toothpaste.",
+              "Do not pop blisters."
+          ]
+      },
+      cpr: {
+          title: "Cardiopulmonary Resuscitation (CPR)",
+          icon: "ph-heartbeat",
+          color: "text-blue-500",
+          steps: [
+              "**Check Safety & Response:** Tap shoulders and shout: 'Are you okay?'.",
+              "**Call 108:** Alert emergency services immediately.",
+              "**Chest Compressions:** Place hands in center of chest and compress 2 inches deep.",
+              "**Rhythm:** Push hard and fast at 100-120 compressions per minute.",
+              "**Rescue Breaths:** If trained, give 2 breaths after every 30 compressions."
+          ],
+          dos: [
+              "Allow chest to fully recoil between pushes.",
+              "Keep compressing until medical staff arrives."
+          ],
+          donts: [
+              "Do not stop compressions for more than 10 seconds.",
+              "Do not press on the lower end of the breastbone."
+          ]
+      },
+      choking: {
+          title: "Choking (Heimlich Maneuver)",
+          icon: "ph-wind",
+          color: "text-purple-500",
+          steps: [
+              "**Confirm Choking:** Ask if they can breathe or speak.",
+              "**5 Back Blows:** Slap firmly between shoulder blades with heel of hand.",
+              "**5 Abdominal Thrusts:** Pull inward and upward above the navel.",
+              "**Alternate:** Repeat 5 blows and 5 thrusts until object is free.",
+              "**Call Help:** Start CPR if they become unresponsive."
+          ],
+          dos: [
+              "Keep the patient calm.",
+              "React quickly."
+          ],
+          donts: [
+              "Do not try blind finger sweeps; you might push the object deeper.",
+              "Do not use Heimlich on infants (use back slaps instead)."
+          ]
+      },
+      bites: {
+          title: "Bites & Stings Guide",
+          icon: "ph-bug",
+          color: "text-yellow-600",
+          steps: [
+              "**Keep Still:** For snakebites, keep the limb still and below heart level.",
+              "**Scrape Stinger:** For bee stings, scrape stinger out with a flat card.",
+              "**Cleanse:** Wash the site with soap and water.",
+              "**Cold Compress:** Apply a cold pack wrapped in a cloth.",
+              "**Monitor:** Look for severe allergic reactions (hives, wheezing)."
+          ],
+          dos: [
+              "Note the animal/insect details if possible.",
+              "Remove tight jewelry near the bite."
+          ],
+          donts: [
+              "Do not cut a snakebite or try to suck out venom.",
+              "Do not use tourniquets."
+          ]
+      },
+      panic: {
+          title: "Panic Attack Assistance",
+          icon: "ph-brain",
+          color: "text-teal-500",
+          steps: [
+              "**Ground Yourself:** Sit down and look around.",
+              "**4-7-8 Breathing:** Breathe in 4s, hold 7s, exhale slowly 8s.",
+              "**Identify Objects:** Name 5 things you can see, 4 you can touch.",
+              "**Reassurance:** Remind yourself this feeling will pass.",
+              "**Focus:** Focus on a single physical sensation or object."
+          ],
+          dos: [
+              "Inhale deep into your belly.",
+              "Close eyes to reduce sensory overload."
+          ],
+          donts: [
+              "Do not try to force the feeling away; let it peak and pass."
+          ]
+      },
+      fracture: {
+          title: "Fractures & Bone Injuries",
+          icon: "ph-bone",
+          color: "text-gray-600",
+          steps: [
+              "**Control Bleeding:** Apply pressure with clean dressing first.",
+              "**Immobilize:** Splint the limb as it is. Do not try to straighten bone.",
+              "**Ice Packs:** Apply ice wrapped in towel to reduce swelling.",
+              "**Elevate:** Raise the limb if it does not cause pain.",
+              "**Prevent Shock:** Keep the person warm and lying down."
+          ],
+          dos: [
+              "Support the joints above and below the fracture.",
+              "Check color and warmth of skin below splint."
+          ],
+          donts: [
+              "Do not move the neck/spine if injury is suspected."
+          ]
+      },
+      poison: {
+          title: "Poisoning First Aid",
+          icon: "ph-skull",
+          color: "text-green-600",
+          steps: [
+              "**Collect Details:** Identify the substance, quantity, and time.",
+              "**Swallowed Poison:** Rinse mouth out. Do not induce vomiting.",
+              "**Chemical on Skin:** Flush with water for 15-20 minutes.",
+              "**Inhaled Gas:** Move victim to fresh air immediately.",
+              "**Call Poison Help:** Bring container/details to the doctor."
+          ],
+          dos: [
+              "Keep the bottle/packaging for identification.",
+              "Keep airway open if victim vomits."
+          ],
+          donts: [
+              "Do not give any food or liquids unless told by a doctor."
+          ]
+      }
+  };
+
+  let activeTTSText = "";
+
+  function openFirstAidDetails(topic) {
+      const data = firstAidData[topic];
+      if (!data) return;
+
+      document.getElementById('firstAidModalIcon').innerHTML = `<i class="ph ${data.icon} ${data.color} text-3xl"></i>`;
+      document.getElementById('firstAidModalTitle').innerText = data.title;
+
+      let html = `<div class="space-y-3">`;
+      html += `<h4 class="font-bold text-gray-800 dark:text-gray-200">Step-by-Step Instructions:</h4>`;
+      html += `<ol class="list-decimal space-y-2 pl-5 text-xs">`;
+      data.steps.forEach(step => {
+          const formatted = step.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+          html += `<li>${formatted}</li>`;
+      });
+      html += `</ol></div>`;
+
+      // Do's
+      html += `<div class="mt-3 rounded-xl bg-green-50 p-3 dark:bg-green-950/20">`;
+      html += `<h4 class="mb-1.5 flex items-center gap-1.5 text-xs font-bold text-green-800 dark:text-green-400"><i class="ph ph-check-circle"></i> DO'S</h4>`;
+      html += `<ul class="list-disc space-y-1 pl-5 text-xs text-green-700 dark:text-green-300">`;
+      data.dos.forEach(item => html += `<li>${item}</li>`);
+      html += `</ul></div>`;
+
+      // Dont's
+      if (data.donts && data.donts.length > 0) {
+          html += `<div class="mt-3 rounded-xl bg-red-50 p-3 dark:bg-red-950/20">`;
+          html += `<h4 class="mb-1.5 flex items-center gap-1.5 text-xs font-bold text-red-800 dark:text-red-400"><i class="ph ph-x-circle"></i> DONT'S</h4>`;
+          html += `<ul class="list-disc space-y-1 pl-5 text-xs text-red-700 dark:text-red-300">`;
+          data.donts.forEach(item => html += `<li>${item}</li>`);
+          html += `</ul></div>`;
+      }
+
+      document.getElementById('firstAidModalContent').innerHTML = html;
+      document.getElementById('firstAidDetailsModal').classList.remove('hidden');
+      document.getElementById('firstAidDetailsModal').classList.add('flex');
+
+      const plainSteps = data.steps.map(s => s.replace(/\*\*/g, '')).join('. ');
+      activeTTSText = `First Aid for ${data.title}. Steps: ${plainSteps}`;
+  }
+
+  function closeFirstAidDetails() {
+      window.speechSynthesis.cancel();
+      document.getElementById('stopSpeechBtn').classList.add('hidden');
+      document.getElementById('firstAidDetailsModal').classList.add('hidden');
+      document.getElementById('firstAidDetailsModal').classList.remove('flex');
+  }
+
+  function filterFirstAid() {
+      const q = document.getElementById('firstAidSearch').value.toLowerCase();
+      document.querySelectorAll('.first-aid-card').forEach(card => {
+          const txt = card.innerText.toLowerCase();
+          if (txt.includes(q)) {
+              card.style.display = 'block';
+          } else {
+              card.style.display = 'none';
+          }
+      });
+  }
+
+  function speakFirstAid() {
+      if (!activeTTSText) return;
+      window.speechSynthesis.cancel();
+      
+      const utterance = new SpeechSynthesisUtterance(activeTTSText);
+      utterance.rate = 0.95;
+      utterance.pitch = 1.0;
+
+      utterance.onstart = () => {
+          document.getElementById('stopSpeechBtn').classList.remove('hidden');
+          document.getElementById('ttsButton').innerHTML = `<i class="ph ph-speaker-slash"></i> <span>Playing Audio Guide...</span>`;
+      };
+      
+      utterance.onend = () => {
+          document.getElementById('stopSpeechBtn').classList.add('hidden');
+          document.getElementById('ttsButton').innerHTML = `<i class="ph ph-speaker-high"></i> <span>Play Audio Guide</span>`;
+      };
+
+      window.speechSynthesis.speak(utterance);
+  }
+
+  // ==========================================
+  //  AI SYMPTOMS DIAGNOSIS INTEL
+  // ==========================================
+  const symptomCatalog = {
+      head: {
+          triage: "MODERATE RISK",
+          color: "border-yellow-200 bg-yellow-50 text-yellow-800 dark:bg-yellow-950/20 dark:text-yellow-300 dark:border-yellow-900/50",
+          cause: "Tension Headache / Migraine / Dehydration",
+          recs: "Rest in a quiet, dark room, hydrate immediately with water/electrolytes, and minimize screen exposure. Consult a clinician if persistent."
+      },
+      chest: {
+          triage: "HIGH RISK",
+          color: "border-red-200 bg-red-50 text-red-800 dark:bg-red-950/20 dark:text-red-300 dark:border-red-900/50",
+          cause: "Cardiovascular Distress / Severe Asthma",
+          recs: "Sit upright, loosen tight clothing, and remain calm. Seek immediate emergency evaluation. Call 108 if chest tightness/breathlessness worsens."
+      },
+      stomach: {
+          triage: "MODERATE RISK",
+          color: "border-yellow-200 bg-yellow-50 text-yellow-800 dark:bg-yellow-950/20 dark:text-yellow-300 dark:border-yellow-900/50",
+          cause: "Gastroenteritis / Acid Reflux / Food Allergy",
+          recs: "Avoid heavy meals, sip warm water or ginger tea, and sit upright. Seek checkup if severe pain or vomiting persists."
+      },
+      general: {
+          triage: "LOW RISK",
+          color: "border-green-200 bg-green-50 text-green-800 dark:bg-green-950/20 dark:text-green-300 dark:border-green-900/50",
+          cause: "Viral Fatigue / Mild Flu / Sleep Deprivation",
+          recs: "Aim for 8 hours of sleep, consume a nutrient-dense warm meal, and monitor your body temperature. Rest is highly recommended."
+      },
+      mental: {
+          triage: "LOW RISK",
+          color: "border-green-200 bg-green-50 text-green-800 dark:bg-green-950/20 dark:text-green-300 dark:border-green-900/50",
+          cause: "Acute Stress / Panic episode / Anxiety onset",
+          recs: "Try our guided 4-7-8 Breathing session immediately. Consider joining an Exam Stress support group in our Peer Forum."
+      }
+  };
+
+  function runSymptomAnalysis() {
+      const loc = document.getElementById('symptomLocation').value;
+      const dur = document.getElementById('symptomDuration').value;
+      const sev = parseInt(document.getElementById('symptomSeverity').value);
+      const notes = document.getElementById('symptomNotes').value;
+
+      let diagnosis = symptomCatalog[loc];
+      
+      // Upgrade severity level based on duration and severity slider input
+      let triageLevel = diagnosis.triage;
+      let finalColor = diagnosis.color;
+      let triageDesc = "We recommend monitoring closely and scheduling a consult.";
+
+      if (sev >= 8 || (loc === 'chest' && sev >= 5) || (dur === 'long' && sev >= 7)) {
+          triageLevel = "HIGH RISK";
+          finalColor = "border-red-200 bg-red-50 text-red-800 dark:bg-red-950/20 dark:text-red-300 dark:border-red-900/50";
+          triageDesc = "⚠️ Seek immediate medical evaluation. Consider emergency first aid or calling 108.";
+          document.getElementById('symptomActionBtn').innerText = "📞 Emergency Contact (108)";
+          document.getElementById('symptomActionBtn').onclick = () => window.location.href = "tel:108";
+      } else if (sev <= 3 && dur === 'brief') {
+          triageLevel = "LOW RISK";
+          finalColor = "border-green-200 bg-green-50 text-green-800 dark:bg-green-950/20 dark:text-green-300 dark:border-green-900/50";
+          triageDesc = "Manageable with self-care, rest, and sound wellness practices.";
+          document.getElementById('symptomActionBtn').innerText = "🧘 Explore Relaxation Audio";
+          document.getElementById('symptomActionBtn').onclick = () => { goBack(); openAudioPage(); };
+      } else {
+          document.getElementById('symptomActionBtn').innerText = "📅 Book Specialist Appointment";
+          document.getElementById('symptomActionBtn').onclick = () => openTeleModal();
+      }
+
+      // Update Result view contents
+      document.getElementById('symptomSeverityBanner').className = `rounded-2xl p-4 text-center border ${finalColor}`;
+      document.getElementById('resultTriageValue').innerText = triageLevel;
+      document.getElementById('resultTriageDesc').innerText = triageDesc;
+      document.getElementById('resultPotentialCause').innerText = diagnosis.cause;
+      document.getElementById('resultRecommendations').innerText = diagnosis.recs;
+
+      // Swap views
+      document.getElementById('symptomFormView').classList.add('hidden');
+      document.getElementById('symptomResultView').classList.remove('hidden');
+  }
+
+  function resetSymptomChecker() {
+      document.getElementById('symptomFormView').classList.remove('hidden');
+      document.getElementById('symptomResultView').classList.add('hidden');
+      document.getElementById('symptomNotes').value = "";
+      document.getElementById('symptomSeverity').value = 5;
+      document.getElementById('severityDisplayValue').innerText = "5 / 10";
+  }
+
+  // ==========================================
+  //  ACTIVE PEER SUPPORT FORUM LOGIC
+  // ==========================================
+  let forumPosts = [
+      { id: 1, author: "Rahul K.", seed: "Felix", time: "2 hours ago", tag: "Exam Stress", title: "How to deal with finals pressure?", content: "I have 3 exams back to back next week and I can't sleep. Any tips?", likes: 12, liked: false, comments: 5 },
+      { id: 2, author: "Sneha M.", seed: "Sarah", time: "5 hours ago", tag: "Anxiety", title: "Deep breathing actually works!", content: "Just tried the 4-7-8 technique from the Relax Audio section. Felt much better immediately.", likes: 45, liked: true, comments: 8 },
+      { id: 3, author: "Amit S.", seed: "John", time: "1 day ago", tag: "Motivation", title: "Small steps matter.", content: "Don't look at the whole mountain, just look at the next step. We got this!", likes: 89, liked: false, comments: 12 }
+  ];
+
+  let currentForumTag = "All";
+
+  function renderForumPosts() {
+      const container = document.getElementById('forumPostsContainer');
+      if (!container) return;
+      container.innerHTML = "";
+
+      const filtered = currentForumTag === "All" 
+          ? forumPosts 
+          : forumPosts.filter(p => p.tag === currentForumTag);
+
+      if (filtered.length === 0) {
+          container.innerHTML = `<div class="py-10 text-center text-sm italic text-gray-400">No stories shared under this topic yet. Be the first to share!</div>`;
+          return;
+      }
+
+      filtered.forEach(p => {
+          const heartIconClass = p.liked ? "ph-heart-fill text-red-500" : "ph-heart";
+          container.innerHTML += `
+              <div class="animate-slide-up rounded-2xl border border-gray-100 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+                  <div class="mb-2 flex items-center justify-between">
+                      <div class="flex items-center gap-3">
+                          <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${p.seed}" class="h-8 w-8 rounded-full bg-gray-100 dark:bg-slate-800">
+                          <div>
+                              <div class="text-xs font-bold text-gray-900 dark:text-white">${p.author}</div>
+                              <div class="text-[10px] text-gray-500">${p.time} • <span class="font-bold text-indigo-500">${p.tag}</span></div>
+                          </div>
+                      </div>
+                  </div>
+                  <h3 class="mb-1 text-sm font-bold dark:text-gray-200">${p.title}</h3>
+                  <p class="text-xs text-gray-600 dark:text-gray-400">${p.content}</p>
+                  <div class="mt-3 flex gap-4 border-t pt-2.5 text-xs text-gray-400 dark:border-slate-800">
+                      <button onclick="likeForumPost(${p.id})" class="flex items-center gap-1 transition hover:text-red-500">
+                          <i class="ph ${heartIconClass} text-base"></i> <span>${p.likes}</span>
+                      </button>
+                      <span class="flex cursor-pointer items-center gap-1"><i class="ph ph-chat-circle text-base"></i> <span>${p.comments}</span></span>
+                  </div>
+              </div>
+          `;
+      });
+  }
+
+  function filterForum(tag) {
+      currentForumTag = tag;
+      
+      // Update tab styles
+      document.querySelectorAll('.forum-tab-btn').forEach(btn => {
+          if (btn.innerText.includes(tag) || (tag === "All" && btn.innerText.includes("All Topics"))) {
+              btn.className = "forum-tab-btn whitespace-nowrap rounded-full bg-indigo-600 px-4 py-1.5 text-xs font-bold text-white shadow-sm";
+          } else {
+              btn.className = "forum-tab-btn whitespace-nowrap rounded-full bg-gray-100 dark:bg-slate-800 px-4 py-1.5 text-xs font-bold text-gray-600 dark:text-gray-300";
+          }
+      });
+
+      renderForumPosts();
+  }
+
+  function likeForumPost(id) {
+      const post = forumPosts.find(p => p.id === id);
+      if (!post) return;
+
+      if (post.liked) {
+          post.likes -= 1;
+          post.liked = false;
+      } else {
+          post.likes += 1;
+          post.liked = true;
+      }
+      renderForumPosts();
+  }
+
+  function openCreatePostModal() {
+      document.getElementById('createPostModal').classList.remove('hidden');
+      document.getElementById('createPostModal').classList.add('flex');
+  }
+
+  function closeCreatePostModal() {
+      document.getElementById('createPostModal').classList.add('hidden');
+      document.getElementById('createPostModal').classList.remove('flex');
+  }
+
+  function handleCreatePost(e) {
+      e.preventDefault();
+      const title = document.getElementById('postTitle').value;
+      const tag = document.getElementById('postTag').value;
+      const content = document.getElementById('postContent').value;
+      const randomSeed = Math.random().toString(36).substring(7);
+
+      const newPost = {
+          id: forumPosts.length + 1,
+          author: "Anonymous Peer",
+          seed: randomSeed,
+          time: "Just now",
+          tag: tag,
+          title: title,
+          content: content,
+          likes: 0,
+          liked: false,
+          comments: 0
+      };
+
+      forumPosts.unshift(newPost);
+      closeCreatePostModal();
+      renderForumPosts();
+      
+      // Reset form
+      document.getElementById('postTitle').value = "";
+      document.getElementById('postContent').value = "";
+      Toastify({ text: "Story shared anonymously!", backgroundColor: "indigo" }).showToast();
+  }
+
+  // ==========================================
+  //  INTERACTIVE GUIDED BREATHING LOGIC
+  // ==========================================
+  let breathingInterval = null;
+  let breathingPhase = 0; // 0 = Inhale, 1 = Hold, 2 = Exhale
+  let breathingTimer = 0;
+  let isBreathingActive = false;
+
+  function openBreathingModal() {
+      document.getElementById('breathingModal').classList.remove('hidden');
+      document.getElementById('breathingModal').classList.add('flex');
+  }
+
+  function closeBreathingModal() {
+      stopBreathingSession();
+      document.getElementById('breathingModal').classList.add('hidden');
+      document.getElementById('breathingModal').classList.remove('flex');
+  }
+
+  function toggleBreathingSession() {
+      if (isBreathingActive) {
+          stopBreathingSession();
+      } else {
+          startBreathingSession();
+      }
+  }
+
+  function startBreathingSession() {
+      isBreathingActive = true;
+      document.getElementById('breathingStartBtn').innerText = "Stop Session";
+      document.getElementById('breathingStartBtn').className = "flex-1 btn-click rounded-xl bg-red-600 py-3 font-bold text-white shadow-lg hover:bg-red-700";
+      
+      breathingPhase = 0;
+      breathingTimer = 4; // 4s inhale start
+      runBreathingTick();
+
+      breathingInterval = setInterval(() => {
+          breathingTimer--;
+          if (breathingTimer <= 0) {
+              // Cycle to next phase
+              breathingPhase = (breathingPhase + 1) % 3;
+              if (breathingPhase === 0) {
+                  breathingTimer = 4; // Inhale
+              } else if (breathingPhase === 1) {
+                  breathingTimer = 7; // Hold
+              } else {
+                  breathingTimer = 8; // Exhale
+              }
+          }
+          runBreathingTick();
+      }, 1000);
+  }
+
+  function stopBreathingSession() {
+      isBreathingActive = false;
+      clearInterval(breathingInterval);
+      document.getElementById('breathingStartBtn').innerText = "Start Session";
+      document.getElementById('breathingStartBtn').className = "flex-1 btn-click rounded-xl bg-teal-600 py-3 font-bold text-white shadow-lg hover:bg-teal-700";
+      
+      const circle = document.getElementById('breathingCircle');
+      circle.style.transform = "scale(1)";
+      document.getElementById('breathingStateText').innerText = "Prepare";
+      document.getElementById('breathingTimerText').innerText = "0s";
+      document.getElementById('breathingInstructionLabel').innerText = "Press Start to begin 4-7-8 breathing";
+  }
+
+  function runBreathingTick() {
+      const circle = document.getElementById('breathingCircle');
+      const stateText = document.getElementById('breathingStateText');
+      const timerText = document.getElementById('breathingTimerText');
+      const instructionLabel = document.getElementById('breathingInstructionLabel');
+
+      timerText.innerText = `${breathingTimer}s`;
+
+      if (breathingPhase === 0) {
+          // Inhale
+          stateText.innerText = "Inhale";
+          instructionLabel.innerText = "Breathe in deeply through your nose...";
+          // Expand circle smoothly over 4s
+          circle.style.transitionDuration = "4000ms";
+          circle.style.transform = "scale(1.6)";
+          circle.className = "h-24 w-24 rounded-full bg-teal-500/50 dark:bg-teal-500/40 flex items-center justify-center transition-all ease-in-out";
+      } else if (breathingPhase === 1) {
+          // Hold
+          stateText.innerText = "Hold";
+          instructionLabel.innerText = "Hold your breath calmly...";
+          circle.style.transitionDuration = "7000ms";
+          circle.style.transform = "scale(1.6)";
+          circle.className = "h-24 w-24 rounded-full bg-yellow-500/50 dark:bg-yellow-500/40 flex items-center justify-center transition-all ease-in-out";
+      } else {
+          // Exhale
+          stateText.innerText = "Exhale";
+          instructionLabel.innerText = "Exhale slowly through your mouth...";
+          // Shrink circle smoothly over 8s
+          circle.style.transitionDuration = "8000ms";
+          circle.style.transform = "scale(1)";
+          circle.className = "h-24 w-24 rounded-full bg-cyan-500/50 dark:bg-cyan-500/40 flex items-center justify-center transition-all ease-in-out";
+      }
+  }
+
+  // ==========================================
+  //  COUNSELLOR PORTAL INTERACTION LOGIC
+  // ==========================================
+  let counsellorAppointments = [
+      { id: 1, patient: "Khushi", date: "2026-06-23", time: "10:30 AM", mode: "Video", notes: "" },
+      { id: 2, patient: "Rahul K.", date: "2026-06-23", time: "02:00 PM", mode: "Audio", notes: "" },
+      { id: 3, patient: "Amit S.", date: "2026-06-24", time: "11:00 AM", mode: "Chat", notes: "" }
+  ];
+
+  let counsellorConsultNotes = [
+      { patient: "Sneha M.", date: "2026-06-22", notes: "Experiencing exam anxiety. Prescribed guided deep breathing 2x daily." }
+  ];
+
+  function renderCounsellorPortal() {
+      const apptContainer = document.getElementById('counsellorAppointments');
+      if (!apptContainer) return;
+      apptContainer.innerHTML = "";
+      
+      counsellorAppointments.forEach(appt => {
+          apptContainer.innerHTML += `
+              <div class="animate-slide-up flex items-center justify-between rounded-xl border border-purple-100 bg-purple-50/50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+                  <div>
+                      <h4 class="font-bold dark:text-white">${appt.patient}</h4>
+                      <p class="text-xs text-gray-500">${appt.date} at ${appt.time} (${appt.mode} session)</p>
+                  </div>
+                  <div class="flex gap-2">
+                      <button onclick="startTelemedicineCall('${appt.patient}')" class="btn-click rounded-lg bg-purple-600 px-3 py-1.5 text-xs font-bold text-white shadow"><i class="ph ph-video-camera"></i> Join</button>
+                      <button onclick="document.getElementById('consultClientName').value = '${appt.patient}'; document.getElementById('consultClientName').scrollIntoView();" class="btn-click rounded-lg border border-purple-500 bg-white px-3 py-1.5 text-xs font-bold text-purple-600 dark:bg-slate-800 dark:text-purple-400">Notes</button>
+                  </div>
+              </div>
+          `;
+      });
+
+      const screeningContainer = document.getElementById('counsellorScreenings');
+      if (!screeningContainer) return;
+      screeningContainer.innerHTML = "";
+      
+      // Load current student score
+      const lastScore = document.getElementById('lastScoreStatus').innerText;
+      screeningContainer.innerHTML += `
+          <div class="space-y-2 rounded-xl border bg-gray-50 p-4 dark:bg-slate-800">
+              <div class="flex items-center justify-between text-xs">
+                  <span class="font-bold text-gray-900 dark:text-white">Khushi</span>
+                  <span class="rounded bg-red-100 px-2 py-0.5 font-bold text-red-700">Score: ${lastScore !== '--' ? lastScore : '8 (Mild)'}</span>
+              </div>
+              <p class="text-xs text-gray-500">Intake questionnaire answers suggest moderate anxiety triggers surrounding exams.</p>
+          </div>
+      `;
+
+      counsellorConsultNotes.forEach(note => {
+          screeningContainer.innerHTML += `
+              <div class="mt-2 space-y-1 rounded-xl border bg-gray-50 p-4 dark:bg-slate-800">
+                  <div class="flex items-center justify-between text-xs text-gray-400">
+                      <span class="font-bold dark:text-white">${note.patient}</span>
+                      <span>${note.date}</span>
+                  </div>
+                  <p class="text-xs italic text-gray-600 dark:text-gray-300">"${note.notes}"</p>
+              </div>
+          `;
+      });
+  }
+
+
+  function saveConsultationNote(e) {
+      e.preventDefault();
+      const patient = document.getElementById('consultClientName').value;
+      const notes = document.getElementById('consultNotes').value;
+      
+      counsellorConsultNotes.unshift({
+          patient: patient,
+          date: new Date().toISOString().split('T')[0],
+          notes: notes
+      });
+
+      document.getElementById('consultClientName').value = "";
+      document.getElementById('consultNotes').value = "";
+      Toastify({ text: "Consultation log note saved successfully!", backgroundColor: "purple" }).showToast();
+      renderCounsellorPortal();
+  }
+
+
+
+  let activeSessionTimer = null;
+  let activeSessionDuration = 0;
+
+  function explorePatientProfile(val) {
+      const summaries = {
+          khushi: {
+              name: "Khushi",
+              risk: "Moderate Risk",
+              riskClass: "bg-red-100 text-red-700",
+              summary: "Primary complaint: High academic distress related to upcoming mathematics and statistics finals. Reporting irregular sleep hygiene and minor panic symptoms.",
+              score: "12 / 27",
+              exercises: "4-7-8 Breathing Loop, Relax Audio"
+          },
+          rahul: {
+              name: "Rahul K.",
+              risk: "Low Risk",
+              riskClass: "bg-green-100 text-green-700",
+              summary: "Mild examination tension. Coping well. Recommending standard wellness soundscapes and 10 minutes of deep meditation daily.",
+              score: "4 / 27",
+              exercises: "Relax Audio, Digital Clinic Read"
+          },
+          amit: {
+              name: "Amit S.",
+              risk: "Mild Stress",
+              riskClass: "bg-yellow-100 text-yellow-700",
+              summary: "Social anxiety triggers reported during public speech practice. Suggesting breathing pacing exercises and student group therapy meetups.",
+              score: "7 / 27",
+              exercises: "4-7-8 Breathing Loop, Peer Forum Group"
+          }
+      };
+
+      const p = summaries[val];
+      if (!p) return;
+
+      document.getElementById('expName').innerText = p.name;
+      document.getElementById('expRisk').innerText = p.risk;
+      document.getElementById('expRisk').className = `rounded px-2 py-0.5 text-[10px] ${p.riskClass}`;
+      document.getElementById('expSummary').innerText = p.summary;
+      document.getElementById('expScore').innerText = p.score;
+      document.getElementById('expExercises').innerText = p.exercises;
+      
+      // Update targeted patient input in prescription builder
+      document.getElementById('prescPatient').value = p.name;
+  }
+
+  function generateDigitalPrescription(e) {
+      e.preventDefault();
+      const patient = document.getElementById('prescPatient').value;
+      const exerciseEl = document.getElementById('prescExercise');
+      const exercise = exerciseEl.options[exerciseEl.selectedIndex].text;
+      const instructions = document.getElementById('prescInstructions').value;
+
+      Toastify({
+          text: `Prescription compiled for ${patient}!\nAssigned: ${exercise}\nPlan downloaded.`,
+          duration: 4000,
+          backgroundColor: "purple",
+          position: "center"
+      }).showToast();
+
+      // Clear input instructions
+      document.getElementById('prescInstructions').value = "";
+  }
+
+  function startTelemedicineCall(patient) {
+      const room = document.getElementById('teleconsultRoom');
+      room.classList.remove('hidden');
+      room.scrollIntoView({ behavior: 'smooth' });
+
+      document.getElementById('teleconsultPatientName').innerText = patient;
+
+      // Start simulated timer
+      activeSessionDuration = 0;
+      const timerEl = document.getElementById('teleconsultTimer');
+      clearInterval(activeSessionTimer);
+      activeSessionTimer = setInterval(() => {
+          activeSessionDuration++;
+          let mins = Math.floor(activeSessionDuration / 60);
+          let secs = activeSessionDuration % 60;
+          timerEl.innerText = `${mins < 10 ? '0' + mins : mins}:${secs < 10 ? '0' + secs : secs}`;
+      }, 1000);
+
+      // Trigger standard video camera view
+      openVideoCall();
+      document.getElementById('camStatus').innerText = `Consulting with ${patient}...`;
+      document.getElementById('camStatus').classList.replace('bg-black/50', 'bg-green-600');
+  }
+
+  function closeActiveConsultRoom() {
+      clearInterval(activeSessionTimer);
+      document.getElementById('teleconsultRoom').classList.add('hidden');
+      closeCameraModal();
+      Toastify({ text: "Consultation ended and logged successfully", backgroundColor: "purple" }).showToast();
+  }
+
+  function simulatePatientChat() {
+      const msg = [
+          "I have been feeling really overwhelmed with finals recently.",
+          "The 4-7-8 breathing method helps, but I still get tense.",
+          "Should I continue taking my vitamins daily?",
+          "Can you recommend a therapy session next week?"
+      ];
+      const randomMsg = msg[Math.floor(Math.random() * msg.length)];
+      Toastify({
+          text: `[Patient Khushi]: "${randomMsg}"`,
+          duration: 5000,
+          backgroundColor: "#6366f1"
+      }).showToast();
+
+      // Add to admin audit log stream as event
+      const logContainer = document.getElementById('adminAuditLogs');
+      if (logContainer) {
+          const time = new Date().toLocaleTimeString();
+          logContainer.innerHTML = `<div class="rounded border-l-4 border-indigo-500 bg-slate-50 p-2 dark:bg-slate-800"><span class="font-bold">[PATIENT]</span> ${time} - Khushi: "${randomMsg}"</div>` + logContainer.innerHTML;
+      }
+  }
+
+  // --- ADMIN PORTAL INTERACTION LOGIC ---
+  let systemUsers = [
+      { name: "Khushi", email: "student@college.edu", role: "Student", active: true },
+      { name: "Dr. Sharma", email: "sharma@sahayak.edu", role: "Counsellor", active: true },
+      { name: "Dr. Anjali", email: "anjali@sahayak.edu", role: "Counsellor", active: true },
+      { name: "Admin Officer", email: "admin@college.edu", role: "Admin", active: true },
+      { name: "Corporate Partner", email: "employer@college.edu", role: "Employer", active: true }
+  ];
+
+  function renderAdminPortal() {
+      const table = document.getElementById('adminUserTable');
+      if (!table) return;
+      table.innerHTML = "";
+
+      systemUsers.forEach((user, idx) => {
+          table.innerHTML += `
+              <tr class="admin-user-row border-b text-xs dark:border-slate-800" data-name="${user.name.toLowerCase()}" data-email="${user.email.toLowerCase()}">
+                  <td class="py-2.5 font-medium dark:text-white">
+                      <div>${user.name}</div>
+                      <div class="text-[10px] text-gray-400">${user.email}</div>
+                  </td>
+                  <td class="py-2.5">
+                      <span class="rounded px-2 py-0.5 text-[10px] font-bold ${
+                          user.role === 'Admin' ? 'bg-red-100 text-red-700' :
+                          user.role === 'Counsellor' ? 'bg-purple-100 text-purple-700' :
+                          user.role === 'Employer' ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700'
+                      }">${user.role}</span>
+                  </td>
+                  <td class="py-2.5">
+                      <span class="rounded px-2 py-0.5 text-[10px] font-bold ${
+                          user.active ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
+                      }">${user.active ? 'Active' : 'Disabled'}</span>
+                  </td>
+                  <td class="space-x-1.5 py-2.5">
+                      <button onclick="changeUserRole(${idx})" class="font-bold text-blue-600 hover:underline">Change Role</button>
+                      <button onclick="toggleUserStatus(${idx})" class="font-bold text-red-500 hover:underline">${user.active ? 'Disable' : 'Enable'}</button>
+                  </td>
+              </tr>
+          `;
+      });
+  }
+
+  function changeUserRole(idx) {
+      const user = systemUsers[idx];
+      const roles = ["Student", "Employer", "Counsellor", "Admin"];
+      const nextRole = roles[(roles.indexOf(user.role) + 1) % roles.length];
+      user.role = nextRole;
+      Toastify({ text: `Promoted ${user.name} to ${nextRole}`, backgroundColor: "orange" }).showToast();
+      renderAdminPortal();
+
+      // Log event
+      const logContainer = document.getElementById('adminAuditLogs');
+      if (logContainer) {
+          const time = new Date().toLocaleTimeString();
+          logContainer.innerHTML = `<div class="rounded border-l-4 border-yellow-500 bg-slate-50 p-2 dark:bg-slate-800"><span class="font-bold">[AUDIT]</span> ${time} - Role changed: ${user.email} -> ${nextRole}</div>` + logContainer.innerHTML;
+      }
+  }
+
+  function toggleUserStatus(idx) {
+      const user = systemUsers[idx];
+      user.active = !user.active;
+      Toastify({ text: `${user.name} is now ${user.active ? 'Active' : 'Disabled'}`, backgroundColor: user.active ? "green" : "red" }).showToast();
+      renderAdminPortal();
+
+      // Log event
+      const logContainer = document.getElementById('adminAuditLogs');
+      if (logContainer) {
+          const time = new Date().toLocaleTimeString();
+          logContainer.innerHTML = `<div class="rounded border-l-4 border-red-500 bg-slate-50 p-2 dark:bg-slate-800"><span class="font-bold">[AUDIT]</span> ${time} - Status changed: ${user.email} -> ${user.active ? 'Active' : 'Disabled'}</div>` + logContainer.innerHTML;
+      }
+  }
+
+  function filterAdminUsers() {
+      const query = document.getElementById('adminUserSearch').value.toLowerCase();
+      document.querySelectorAll('.admin-user-row').forEach(row => {
+          const name = row.getAttribute('data-name');
+          const email = row.getAttribute('data-email');
+          if (name.includes(query) || email.includes(query)) {
+              row.style.display = "";
+          } else {
+              row.style.display = "none";
+          }
+      });
+  }
+
+  // ==========================================
+  //  EMPLOYER PORTAL INTERACTION LOGIC
+  // ==========================================
+  let corporateWorkshops = [
+      { id: 1, type: "Mindfulness & Meditation workshop", date: "2026-06-25", time: "09:00 AM", status: "Scheduled" },
+      { id: 2, type: "Preventing Burnout Seminar", date: "2026-06-28", time: "03:00 PM", status: "Scheduled" }
+  ];
+
+  let corporateCampaigns = [
+      { title: "Mindfulness Mondays", desc: "10-minute guided meditation starts every Monday at 10 AM.", participants: 84 },
+      { title: "Digital Detox Challenge", desc: "No non-work screens between 2 PM and 4 PM daily.", participants: 62 },
+      { title: "Anxiety Buster Seminar", desc: "Interactive session with therapist Dr. Priya.", participants: 110 }
+  ];
+
+  function renderEmployerPortal() {
+      const campaignsContainer = document.getElementById('activeCampaignsList');
+      if (!campaignsContainer) return;
+      campaignsContainer.innerHTML = "";
+
+      corporateCampaigns.forEach(c => {
+          campaignsContainer.innerHTML += `
+               <div class="animate-slide-up mb-2 flex items-center justify-between rounded-xl border border-emerald-100 bg-emerald-50/50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+                   <div>
+                       <h4 class="font-bold dark:text-white">${c.title}</h4>
+                       <p class="text-xs text-gray-500">${c.desc}</p>
+                   </div>
+                   <span class="rounded bg-emerald-100 px-2 py-1 text-xs font-bold text-emerald-700">${c.participants} joined</span>
+               </div>
+          `;
+      });
+
+      // Render scheduled workshops
+      corporateWorkshops.forEach(w => {
+          campaignsContainer.innerHTML += `
+               <div class="animate-slide-up mb-2 flex items-center justify-between rounded-xl border border-teal-100 bg-teal-50/50 p-4 dark:border-slate-800 dark:bg-slate-900/60">
+                   <div>
+                       <h4 class="font-bold dark:text-white">${w.type}</h4>
+                       <p class="text-xs text-gray-500">${w.date} at ${w.time}</p>
+                   </div>
+                   <span class="rounded bg-teal-100 px-2 py-1 text-xs font-bold text-teal-700">${w.status}</span>
+               </div>
+          `;
+      });
+
+      renderEmployerChart();
+  }
+
+  function scheduleCorporateWorkshop(e) {
+      e.preventDefault();
+      const typeEl = document.getElementById('workshopType');
+      const type = typeEl.options[typeEl.selectedIndex].text;
+      const date = document.getElementById('workshopDate').value;
+      const time = document.getElementById('workshopTime').value;
+
+      corporateWorkshops.unshift({
+          id: corporateWorkshops.length + 1,
+          type: type,
+          date: date,
+          time: time,
+          status: "Scheduled"
+      });
+
+      document.getElementById('workshopDate').value = "";
+      document.getElementById('workshopTime').value = "";
+      
+      Toastify({ text: "Corporate workshop scheduled successfully!", backgroundColor: "emerald" }).showToast();
+      renderEmployerPortal();
+  }
+
+  function renderEmployerChart() {
+      const canvas = document.getElementById('chartEmployerAnalytics');
+      if (!canvas) return;
+      new Chart(canvas, {
+          type: 'bar',
+          data: {
+              labels: ['Anxiety', 'Burnout', 'Focus Loss', 'Stress Levels'],
+              datasets: [{
+                  label: 'Employee Wellness Metric %',
+                  data: [35, 48, 22, 54],
+                  backgroundColor: [
+                      'rgba(16, 185, 129, 0.7)',
+                      'rgba(20, 184, 166, 0.7)',
+                      'rgba(99, 102, 241, 0.7)',
+                      'rgba(168, 85, 247, 0.7)'
+                  ],
+                  borderColor: [
+                      'rgb(16, 185, 129)',
+                      'rgb(20, 184, 166)',
+                      'rgb(99, 102, 241)',
+                      'rgb(168, 85, 247)'
+                  ],
+                  borderWidth: 1
+              }]
+          },
+          options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                  legend: { display: false }
+              },
+              scales: {
+                  y: { beginAtZero: true, max: 100 }
+              }
+          }
+      });
+  }
+
+  // Trigger render on startup based on default role
+  const initialRole = localStorage.getItem('userRole') || 'student';
+  setTimeout(() => {
+      loadDashboard(initialRole);
+      renderForumPosts();
+  }, 500);
 
   // --- FULL TRANSLATOR (UPDATED) ---
   const trans = {
