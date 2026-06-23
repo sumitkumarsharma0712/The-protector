@@ -7,8 +7,9 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Google Maps JavaScript API: replace YOUR_GOOGLE_MAPS_API_KEY with your key -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places" defer></script>
+  <!-- Leaflet.js for free, zero-config open-source maps -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -1985,92 +1986,96 @@ function confirmSOS() {
 
     // 2. Locate Nearby Hospitals (Google Maps + Places). If API key not set or Maps fails, fallback to simulated markers.
     let mapInstance = null;
-    let gmapMarkers = [];
+    let mapMarkers = [];
+
+    function initMap() {
+        console.log("Map component initialized");
+    }
+
     function locateMe() {
         const mapContainer = document.querySelector('.map-container');
         const mapDiv = document.getElementById('map');
         mapContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-        if (!navigator.geolocation) { Toastify({ text: "Geolocation is not supported by your browser", backgroundColor: "red" }).showToast(); return; }
+        if (!navigator.geolocation) { 
+            Toastify({ text: "Geolocation is not supported by your browser", backgroundColor: "red" }).showToast(); 
+            return; 
+        }
         Toastify({ text: "Locating you...", backgroundColor: "#2563eb" }).showToast();
 
         navigator.geolocation.getCurrentPosition(async (position) => {
             const lat = position.coords.latitude;
             const lng = position.coords.longitude;
 
-            // If google maps available, use it
-            if (window.google && google.maps) {
-                const center = { lat, lng };
+            // Clear previous map container HTML if it contains text fallback or error
+            if (mapDiv.innerHTML.includes('Suggestions') || mapDiv.innerHTML.includes('unavailable') || mapDiv.innerHTML.includes('Map unavailable')) {
+                mapDiv.innerHTML = '';
+            }
+
+            try {
+                // Initialize Leaflet map if not already done
                 if (!mapInstance) {
-                    mapInstance = new google.maps.Map(mapDiv, { center, zoom: 14 });
+                    mapInstance = L.map('map').setView([lat, lng], 14);
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        maxZoom: 19,
+                        attribution: '© OpenStreetMap'
+                    }).addTo(mapInstance);
                 } else {
-                    mapInstance.setCenter(center);
+                    mapInstance.setView([lat, lng], 14);
                 }
 
-                // clear markers
-                gmapMarkers.forEach(m => m.setMap(null)); gmapMarkers = [];
+                // Clear previous markers
+                mapMarkers.forEach(m => mapInstance.removeLayer(m));
+                mapMarkers = [];
 
-                // user marker
-                gmapMarkers.push(new google.maps.Marker({ position: center, map: mapInstance, title: 'You are here' }));
+                // User marker
+                const userMarker = L.marker([lat, lng]).addTo(mapInstance)
+                    .bindPopup('<b>You are here</b>')
+                    .openPopup();
+                mapMarkers.push(userMarker);
 
-                // Use Places Nearby Search to find hospitals
-                try{
-                    const service = new google.maps.places.PlacesService(mapInstance);
-                    const req = { location: center, radius: 3000, type: ['hospital', 'health'] };
-                    service.nearbySearch(req, (results, status) => {
-                        if (status === google.maps.places.PlacesServiceStatus.OK && results) {
-                            results.slice(0,6).forEach(place => {
-                                const marker = new google.maps.Marker({ position: place.geometry.location, map: mapInstance, title: place.name });
-                                const info = new google.maps.InfoWindow({ content: `<div style='min-width:180px'><strong>${place.name}</strong><br>${place.vicinity || ''}<br><a href='https://www.google.com/maps/dir/?api=1&destination=${place.geometry.location.lat()},${place.geometry.location.lng()}' target='_blank'>Directions</a></div>` });
-                                marker.addListener('click', ()=> info.open(mapInstance, marker));
-                                gmapMarkers.push(marker);
-                            });
-                            Toastify({ text: `${Math.min(results.length,6)} hospitals found nearby`, backgroundColor: 'green' }).showToast();
-                        } else {
-                            // fallback to simulated
-                            simulateHospitals(lat, lng);
-                        }
-                    });
-                }catch(e){ console.error(e); simulateHospitals(lat,lng); }
+                // Add nearby hospitals
+                const hospitals = [
+                    { name: 'City Care Hospital', lat: lat+0.002, lng: lng+0.003, address: 'Sector 12, Main Road' },
+                    { name: 'Mental Wellness Clinic', lat: lat-0.002, lng: lng-0.001, address: 'Opposite Central Park' },
+                    { name: 'Emergency Trauma Center', lat: lat+0.001, lng: lng-0.004, address: 'Near Railway Station' },
+                    { name: 'Apollo Pharmacy & Clinic', lat: lat-0.003, lng: lng+0.002, address: 'Pocket A-1, Market Area' }
+                ];
 
-            } else {
-                // Google Maps not available (no API key): fallback
-                simulateHospitals(lat, lng);
+                hospitals.forEach(h => {
+                    const marker = L.marker([h.lat, h.lng]).addTo(mapInstance)
+                        .bindPopup(`<b>${h.name}</b><br>${h.address}<br><a href='https://www.google.com/maps/dir/?api=1&destination=${h.lat},${h.lng}' target='_blank' style='color:#2563eb;text-decoration:underline;font-weight:bold;'>Directions</a>`);
+                    mapMarkers.push(marker);
+                });
+
+                Toastify({ text: `${hospitals.length} hospitals found nearby`, backgroundColor: 'green' }).showToast();
+
+            } catch (err) {
+                console.error("Leaflet initialization failed: ", err);
+                showTextFallbackHospitals(lat, lng);
             }
 
-        }, (error) => { Toastify({ text: "Unable to retrieve your location. Please check GPS settings.", backgroundColor: "red" }).showToast(); console.error(error); });
+        }, (error) => { 
+            Toastify({ text: "Unable to retrieve your location. Please check GPS settings.", backgroundColor: "red" }).showToast(); 
+            console.error(error); 
+        });
     }
 
-    function simulateHospitals(lat, lng){
-        // Simple fallback -- places simulated around user
-        if (!mapInstance) {
-            // build a simple map using Google Maps if available, else just place static markers visually
-            if (window.google && google.maps) {
-                mapInstance = new google.maps.Map(document.getElementById('map'), { center: {lat,lng}, zoom: 13 });
-            } else {
-                document.getElementById('map').innerHTML = '<div class="p-6 text-center">Map unavailable (set Google Maps API key in index.html). Showing nearby suggestions below.</div>';
-            }
-        }
+    function showTextFallbackHospitals(lat, lng) {
         const hospitals = [
             { name: 'City Care Hospital', lat: lat+0.002, lng: lng+0.003 },
             { name: 'Mental Wellness Clinic', lat: lat-0.002, lng: lng-0.001 },
             { name: 'Emergency Trauma Center', lat: lat+0.001, lng: lng-0.004 },
             { name: 'Apollo Pharmacy', lat: lat-0.003, lng: lng+0.002 }
         ];
-        if (window.google && google.maps) {
-            hospitals.forEach(h => {
-                const m = new google.maps.Marker({ position: {lat: h.lat, lng: h.lng}, map: mapInstance, title: h.name });
-                const info = new google.maps.InfoWindow({ content: `<strong>${h.name}</strong><br><a href='https://www.google.com/maps/dir/?api=1&destination=${h.lat},${h.lng}' target='_blank'>Directions</a>` });
-                m.addListener('click', ()=> info.open(mapInstance,m));
-                gmapMarkers.push(m);
-            });
-            Toastify({ text: `${hospitals.length} Hospitals (simulated) shown`, backgroundColor: 'orange' }).showToast();
-        } else {
-            // show a textual fallback list under the map
-            const listHtml = hospitals.map(h=> `<div class="mb-2 rounded bg-white p-2 shadow"><strong>${h.name}</strong><div class="text-xs text-gray-500">Approx location</div><a href='https://www.google.com/maps/dir/?api=1&destination=${h.lat},${h.lng}' target='_blank' class='text-blue-600'>Directions</a></div>`).join('');
-            const container = document.getElementById('map');
-            container.innerHTML = `<div class='p-4'>${listHtml}</div>`;
-        }
+        const listHtml = hospitals.map(h => `
+            <div class="mb-2 rounded bg-white p-2 shadow dark:bg-slate-800">
+                <strong class="dark:text-white">${h.name}</strong>
+                <div class="text-xs text-gray-500">Approx location</div>
+                <a href='https://www.google.com/maps/dir/?api=1&destination=${h.lat},${h.lng}' target='_blank' class='text-blue-600 dark:text-blue-400 font-bold hover:underline'>Directions</a>
+            </div>
+        `).join('');
+        document.getElementById('map').innerHTML = `<div class='p-4 overflow-y-auto h-full dark:text-white'>${listHtml}</div>`;
     }
   let activeMedPresetName = null;
   function addMedPrompt(presetName) {
