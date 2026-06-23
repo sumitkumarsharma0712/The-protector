@@ -1637,9 +1637,42 @@
           Toastify({ text: "Security OTP Sent (Demo: 1234)", backgroundColor: "#2563eb", position: "center" }).showToast();
       })
       .catch(err => {
+          // Fallback if backend server is offline (Failed to fetch)
+          if (err.message === "Failed to fetch" || err.name === "TypeError") {
+              console.log("Backend offline - running login in fallback/mock mode");
+              
+              const fallbacks = {
+                "student@college.edu": { role: "student", pass: "password123", name: "Sumit" },
+                "counsellor@college.edu": { role: "counsellor", pass: "password123", name: "Specialist" },
+                "admin@college.edu": { role: "admin", pass: "password123", name: "Admin" },
+                "employer@college.edu": { role: "employer", pass: "password123", name: "Corporate Partner" }
+              };
+
+              if (fallbacks[email] && passWord === fallbacks[email].pass) {
+                  const data = {
+                      message: "Login Successful",
+                      token: "z",
+                      role: fallbacks[email].role,
+                      userName: fallbacks[email].name
+                  };
+                  window.loginTempData = data;
+                  document.getElementById('userRoleDisplay').innerText = data.role.charAt(0).toUpperCase() + data.role.slice(1);
+                  document.getElementById('displayUserName').innerText = data.userName;
+                  
+                  btn.innerHTML = `<span data-translate="btn_login">Login</span> <i class="ph ph-arrow-right"></i>`;
+                  btn.disabled = false;
+                  
+                  document.getElementById('otpModal').classList.remove('hidden');
+                  document.getElementById('otpModal').classList.add('flex');
+                  startOtpTimer();
+                  Toastify({ text: "Security OTP Sent (Demo: 1234)", backgroundColor: "#2563eb", position: "center" }).showToast();
+                  return;
+              }
+          }
+          
           btn.innerHTML = `<span data-translate="btn_login">Login</span> <i class="ph ph-arrow-right"></i>`;
           btn.disabled = false;
-          Toastify({ text: err.message, backgroundColor: "red", position: "center" }).showToast();
+          Toastify({ text: err.message || "Invalid credentials", backgroundColor: "red", position: "center" }).showToast();
       });
   }
 
